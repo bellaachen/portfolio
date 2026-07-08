@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bella Chen — Product Manager | Turning Complexity into Clarity</title>
+<meta name="description" content="Product Manager specializing in trading platforms, FIX API integration, and back-office systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ Japanese Clean Design Tokens ============ */
+  :root{
+    --white:#FFFFFF;
+    --sky:#B8E3FF;
+    --blue:#78C4FF;
+    --navy:#2D4059;
+    --sand:#F9F7F3;
+    --gray:#6B7280;
+    --success:#A7E3B1;
+    --warning:#FFD080;
+    --border:#E5E7EB;
+    --text-primary:#2D4059;
+    --text-secondary:#6B7280;
+    --caption:#9CA3AF;
+    --highlight:#78C4FF;
+    --primary-hover:#5BAFF9;
+    --grad-hero:linear-gradient(135deg,#FFFFFF 0%,#E6F4FF 50%,#B8E3FF 100%);
+    --grad-soft-blue:linear-gradient(135deg,#B8E3FF 0%,#78C4FF 100%);
+    --grad-warm-neutral:linear-gradient(135deg,#FFFFFF 0%,#F9F7F3 100%);
+    --radius:20px;
+    --shadow-card:0 10px 30px rgba(45,64,89,0.06);
+    --shadow-hover:0 14px 36px rgba(45,64,89,0.10);
+    --font:'Noto Sans TC','Inter',-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+
+  body{font-family:var(--font);background:var(--sand);color:var(--text-primary);line-height:1.75;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  section{padding:88px 0}
+  .eyebrow{font-family:'Inter',monospace;font-size:13px;letter-spacing:2.5px;color:var(--blue);font-weight:600;text-transform:uppercase;margin-bottom:10px}
+  .sec-h{font-size:30px;font-weight:700;margin-bottom:14px}
+  .sec-sub{color:var(--text-secondary);font-size:15.5px;max-width:560px;margin-bottom:42px}
+  a{color:var(--highlight)}
+
+  /* i18n visibility */
+  [data-lang="en"] .zh{display:none}
+  [data-lang="zh"] .en{display:none}
+
+  /* ============ Nav ============ */
+  nav{position:sticky;top:0;z-index:20;background:rgba(249,247,243,0.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .nav-in{max-width:1080px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+  .logo{color:var(--blue);font-weight:700;font-size:18px;text-decoration:none;letter-spacing:.3px}
+  .nav-links{display:flex;gap:28px;font-size:14px}
+  .nav-links a{color:var(--text-secondary);text-decoration:none;transition:color .2s}
+  .nav-links a:hover{color:var(--navy)}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .lang-toggle{display:flex;border:1.5px solid var(--sky);border-radius:999px;overflow:hidden;background:var(--white)}
+  .lang-toggle button{border:none;background:none;font-family:var(--font);font-size:12.5px;font-weight:600;padding:5px 13px;cursor:pointer;color:var(--text-secondary);transition:background .2s,color .2s}
+  .lang-toggle button.on{background:var(--blue);color:var(--white)}
+  .btn{display:inline-block;font-family:var(--font);font-size:14px;font-weight:600;border-radius:999px;padding:9px 22px;cursor:pointer;text-decoration:none;transition:background .2s,transform .2s}
+  .btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+  .btn-primary{background:var(--blue);color:var(--white);border:none}
+  .btn-primary:hover{background:var(--primary-hover)}
+  .btn-secondary{background:var(--white);color:var(--blue);border:1.5px solid var(--sky)}
+  .btn-secondary:hover{background:#F2FAFF}
+
+  /* ============ Hero ============ */
+  .hero{background:var(--grad-hero);padding:110px 0 130px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+  .hero-in{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 28px}
+  .hero h1{font-size:clamp(34px,5.4vw,54px);line-height:1.3;font-weight:700;max-width:560px}
+  .hero h1 .accent{color:var(--blue)}
+  .hero p{max-width:480px;margin-top:20px;font-size:16px;color:var(--text-secondary)}
+  .hero .actions{margin-top:32px;display:flex;gap:14px;flex-wrap:wrap}
+  .hero-tags{margin-top:36px;display:flex;gap:10px;flex-wrap:wrap}
+  .tag{display:inline-block;padding:5px 16px;border-radius:999px;font-size:13px;font-weight:500;background:var(--white);border:1px solid var(--border);color:var(--text-secondary)}
+  .tag.b{background:var(--sky);color:var(--navy);border-color:transparent}
+  /* ============ Career timeline ============ */
+  .timeline{position:relative;margin-top:8px;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--border);border-radius:2px}
+  .tl-item{position:relative;padding:0 0 40px 22px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-29px;top:7px;width:16px;height:16px;border-radius:50%;background:var(--white);border:3.5px solid var(--blue);box-shadow:0 0 0 4px rgba(120,196,255,0.18)}
+  .tl-item.now::before{background:var(--blue)}
+  .tl-item.pause::before{border-color:var(--caption);box-shadow:0 0 0 4px rgba(156,163,175,0.14)}
+  .tl-period{font-family:'Inter',monospace;font-size:12.5px;color:var(--caption);letter-spacing:.5px}
+  .tl-role{font-size:17px;font-weight:700;margin-top:3px}
+  .tl-org{font-size:14px;color:var(--blue);font-weight:600;margin-top:1px}
+  .tl-desc{font-size:14px;color:var(--text-secondary);margin-top:8px;max-width:640px}
+  .tl-kws{margin-top:10px;display:flex;flex-wrap:wrap;gap:7px}
+  .tl-kws span{font-size:12px;background:var(--white);border:1px solid var(--border);color:var(--text-secondary);border-radius:999px;padding:3px 12px}
+
+  /* ============ More work (compact) ============ */
+  .more-title{font-size:16px;font-weight:700;margin:48px 0 6px}
+  .more-sub{font-size:13.5px;color:var(--caption);margin-bottom:20px}
+  .more-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .mini-work{background:var(--sand);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:transform .2s,box-shadow .2s}
+  .mini-work:hover{transform:translateY(-2px);box-shadow:var(--shadow-card)}
+  .mini-work .h{font-weight:700;font-size:14.5px}
+  .mini-work .m{font-family:'Inter',monospace;font-size:12px;color:var(--blue);font-weight:600;margin-top:3px}
+  .mini-work p{font-size:13px;color:var(--text-secondary);margin-top:7px}
+
+  /* ============ About ============ */
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:44px;align-items:start}
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr}}
+  .about-grid p{color:var(--text-secondary);font-size:15.5px;margin-bottom:16px}
+  .fact-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:26px 28px}
+  .fact{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--border);font-size:14px}
+  .fact:last-child{border-bottom:none}
+  .fact .k{color:var(--caption)}
+  .fact .v{font-weight:600;text-align:right}
+
+  /* ============ Work ============ */
+  #work{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+  .case{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:30px;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s}
+  .case:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+  .case .icon{width:50px;height:50px;border-radius:14px;background:var(--grad-soft-blue);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
+  .case .role-tag{font-family:'Inter',monospace;font-size:11.5px;letter-spacing:1.5px;color:var(--blue);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+  .case h3{font-size:18.5px;margin-bottom:10px;line-height:1.45}
+  .case p{color:var(--text-secondary);font-size:14px;flex:1}
+  .case .kws{margin-top:16px;display:flex;flex-wrap:wrap;gap:7px}
+  .case .kws span{font-size:12px;background:var(--sand);border:1px solid var(--border);color:var(--text-secondary);border-radius:999px;padding:3px 12px}
+  .case a{display:inline-block;margin-top:18px;font-weight:600;text-decoration:none;font-size:14px}
+  .case a:hover{text-decoration:underline}
+  .flag{background:#FFF7EA;color:#8A6415;font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 12px;display:inline-block;margin-left:8px;vertical-align:2px}
+
+  /* ============ Skills ============ */
+  .skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-card)}
+  .skill-cell{padding:26px 28px;border-bottom:1px solid var(--border)}
+  @media(min-width:680px){
+    .skill-cell:nth-child(odd){border-right:1px solid var(--border)}
+    .skill-cell:nth-last-child(-n+2){border-bottom:none}
+  }
+  .skill-cell .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+  .skill-cell .name{font-weight:700;font-size:15px}
+  .skill-cell .pct{font-family:'Inter',monospace;font-size:12.5px;color:var(--text-secondary)}
+  .progress{height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+  .progress .fill{height:100%;background:var(--blue);border-radius:999px;transition:width 1s ease}
+  .skill-cell .note{font-size:12.5px;color:var(--caption);margin-top:9px}
+
+  /* ============ Thoughts ============ */
+  #thoughts{background:var(--grad-warm-neutral)}
+  .thought-list{display:grid;gap:16px}
+  .thought{background:var(--white);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-card);padding:22px 26px;display:flex;justify-content:space-between;gap:20px;align-items:baseline;text-decoration:none;color:var(--text-primary);transition:transform .2s,box-shadow .2s}
+  .thought:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+  .thought .t{font-weight:600;font-size:15.5px}
+  .thought .d{font-family:'Inter',monospace;font-size:12.5px;color:var(--caption);flex:none}
+
+  /* ============ Contact ============ */
+  #contact .card{background:var(--grad-hero);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:56px 40px;text-align:center}
+  #contact h2{font-size:28px;margin-bottom:12px}
+  #contact p{color:var(--text-secondary);max-width:440px;margin:0 auto 26px;font-size:15px}
+
+  /* ============ Alert (placeholder note) ============ */
+  .alert{display:flex;gap:12px;align-items:flex-start;background:#EFF8FF;border:1px solid var(--sky);border-radius:14px;padding:13px 18px;font-size:13.5px;color:var(--navy);margin-top:34px}
+  .alert .i{flex:none;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--blue);color:var(--blue);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Inter',serif;font-style:italic;margin-top:2px}
+
+  /* ============ Footer ============ */
+  footer{border-top:1px solid var(--border);padding:26px 0;background:var(--sand)}
+  .foot-in{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--caption);font-size:13px}
+  .foot-in .sig{font-family:'Inter',monospace;letter-spacing:.5px}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.vis{opacity:1;transform:none}
+</style>
+</head>
+<body data-lang="zh">
+
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="#top">Bella</a>
+    <div class="nav-links">
+      <a href="#about"><span class="zh">關於</span><span class="en">About</span></a>
+      <a href="#career"><span class="zh">經歷</span><span class="en">Career</span></a>
+      <a href="#work"><span class="zh">作品</span><span class="en">Work</span></a>
+      <a href="#skills"><span class="zh">能力</span><span class="en">Skills</span></a>
+      <a href="#thoughts"><span class="zh">文章</span><span class="en">Thoughts</span></a>
+    </div>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button id="btn-zh" class="on" onclick="setLang('zh')">中</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
+      <a class="btn btn-primary" href="#contact"><span class="zh">聯絡我</span><span class="en">Contact Me</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ Hero ============ -->
+<header class="hero" id="top">
+  <div class="hero-in">
+    <h1>
+      <span class="zh">把複雜，<br>整理成<span class="accent">清晰</span>。</span>
+      <span class="en">Turning Complexity<br>into <span class="accent">Clarity</span>.</span>
+    </h1>
+    <p>
+      <span class="zh">金融交易平台產品經理。從清算後台到 FIX API 整合，我把散落的系統知識變成可執行的規格、可複用的流程。</span>
+      <span class="en">Product Manager for trading platforms. From clearing back-office to FIX API integration, I turn scattered system knowledge into executable specs and repeatable processes.</span>
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#work"><span class="zh">看我的作品 →</span><span class="en">View My Work →</span></a>
+      <a class="btn btn-secondary" href="#about"><span class="zh">認識我</span><span class="en">About Me</span></a>
+    </div>
+    <div class="hero-tags">
+      <span class="tag b">Trading Platform</span>
+      <span class="tag b">FIX API</span>
+      <span class="tag">Back Office</span>
+      <span class="tag">Clearing</span>
+      <span class="tag">Systems Thinking</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ About ============ -->
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">About</div>
+    <h2 class="sec-h"><span class="zh">關於我</span><span class="en">Who I Am</span></h2>
+    <div class="about-grid">
+      <div>
+        <p>
+          <span class="zh">我是一位偏向 Systems PM 的產品經理：擅長把整個系統攤開來看，找到流程的斷點，建立規則，再把規則寫成工程師可以直接執行的規格。</span>
+          <span class="en">I'm a systems-oriented Product Manager: I map whole systems, find where processes break, build the rules, and translate them into specs engineers can execute directly.</span>
+        </p>
+        <p>
+          <span class="zh">十年 PM 路徑橫跨金融數據、社群生態系與移動出行，最後在交易平台落地。清算團隊出身的背景，讓我對交易平台的底層 — FIX 協議、後台權限、佣金與返佣邏輯、公司行動 — 有第一手的領域深度。這是多數 feature PM 沒有的視角。</span>
+          <span class="en">A ten-year PM path across fintech data, community ecosystems, and mobility eventually landed in trading platforms. A clearing-team background gives me first-hand depth in their underside — FIX protocol, back-office permissions, commission and rebate logic, corporate actions. It's a perspective most feature PMs never get.</span>
+        </p>
+        <p>
+          <span class="zh">我相信好的產品工作是把混亂變成秩序、把知識變成流程、把流程變成組織可以重複使用的能力。</span>
+          <span class="en">I believe good product work turns chaos into order, knowledge into process, and process into capability an organization can reuse.</span>
+        </p>
+      </div>
+      <div class="fact-card">
+        <div class="fact"><span class="k"><span class="zh">現職</span><span class="en">Role</span></span><span class="v">Product Manager · Fintech</span></div>
+        <div class="fact"><span class="k"><span class="zh">PM 年資</span><span class="en">Experience</span></span><span class="v">10+ <span class="zh">年</span><span class="en">years</span></span></div>
+        <div class="fact"><span class="k"><span class="zh">領域</span><span class="en">Domain</span></span><span class="v">Trading Platforms</span></div>
+        <div class="fact"><span class="k"><span class="zh">所在地</span><span class="en">Based in</span></span><span class="v">Taipei, Taiwan</span></div>
+        <div class="fact"><span class="k"><span class="zh">開放地點</span><span class="en">Open to</span></span><span class="v">Japan · Singapore</span></div>
+        <div class="fact"><span class="k"><span class="zh">語言</span><span class="en">Languages</span></span><span class="v">中文 · English</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Career Path ============ -->
+<section id="career" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Career Path</div>
+    <h2 class="sec-h"><span class="zh">職涯路徑</span><span class="en">Career Path</span></h2>
+    <p class="sec-sub">
+      <span class="zh">十年 PM 路徑：從數據金融、社群生態系、移動出行，走向交易平台的系統深水區。</span>
+      <span class="en">A ten-year PM path: from fintech data and community ecosystems through mobility, into the deep systems of trading platforms.</span>
+    </p>
+    <div class="timeline">
+
+      <div class="tl-item now reveal">
+        <div class="tl-period">2024 — <span class="zh">現在</span><span class="en">Present</span></div>
+        <div class="tl-role">Product Manager</div>
+        <div class="tl-org">ACY Securities · <span class="zh">交易平台</span><span class="en">Trading Platform</span></div>
+        <div class="tl-desc">
+          <span class="zh">負責交易平台產品：FIX API 機構接入、證券 APP 從重建到全量發布、後台權限與佣金／返佣系統。清算團隊出身，是團隊裡少數同時懂前台產品與後台清算的 PM。</span>
+          <span class="en">Own trading-platform products: FIX API institutional connectivity, a securities app taken from rebuild to full rollout, and back-office permission and commission/rebate systems. Clearing-team background — one of the few PMs fluent in both front-office product and back-office operations.</span>
+        </div>
+        <div class="tl-kws"><span>FIX API</span><span>Clearing</span><span>Back Office</span><span>Mobile</span></div>
+      </div>
+
+      <div class="tl-item pause reveal">
+        <div class="tl-period">2023.07 — 2024.07</div>
+        <div class="tl-role"><span class="zh">獨立專案</span><span class="en">Independent Projects</span></div>
+        <div class="tl-org"><span class="zh">職涯空檔・跨域探索</span><span class="en">Career Break · Cross-domain Work</span></div>
+        <div class="tl-desc">
+          <span class="zh">接手數位行銷與專案管理案（SEO、廣告、品牌），規劃會員管理系統並主導企業與基金會官網設計，同時經營工作坊與讀書會社群。</span>
+          <span class="en">Delivered digital marketing and PM engagements (SEO, ads, branding), planned a member-management system, led corporate and foundation website design, and ran workshops and book clubs.</span>
+        </div>
+        <div class="tl-kws"><span>Growth</span><span>Web Planning</span><span>Community</span></div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-period">2023.03 — 2023.06</div>
+        <div class="tl-role">Project Manager</div>
+        <div class="tl-org">Taiwan Taxi 55688 · <span class="zh">移動出行平台</span><span class="en">Mobility Platform</span></div>
+        <div class="tl-desc">
+          <span class="zh">將家事清潔服務從 webview 改造成原生流程、規劃 in-app 事件追蹤基礎建設，並開發 MGM 跨產品導流後台，串起集團生態系。</span>
+          <span class="en">Rebuilt the home-cleaning flow from webview to native, designed in-app event-tracking infrastructure, and built an MGM cross-promotion backend connecting products across the group.</span>
+        </div>
+        <div class="tl-kws"><span>Event Tracking</span><span>MGM Backend</span><span>UX Redesign</span></div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-period">2021.03 — 2023.03</div>
+        <div class="tl-role">Product Manager</div>
+        <div class="tl-org">Gamania · beanfun! <span class="zh">社群生態系</span><span class="en">Community Ecosystem</span></div>
+        <div class="tl-desc">
+          <span class="zh">從 0 到 1 打造核心功能「Groups」，整體停留時間提升 3 倍；重新設計註冊登入流程，客訴減少 30%；並建立內容審核後台，大幅降低詐騙與廣告曝露。</span>
+          <span class="en">Built "Groups" from 0→1 as a core ecosystem feature, tripling overall retention time; redesigned onboarding, cutting complaints by 30%; and implemented a content-moderation backend that sharply reduced scam and ad exposure.</span>
+        </div>
+        <div class="tl-kws"><span>0→1</span><span>3× Retention</span><span>Moderation System</span></div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-period">2015.11 — 2021.02</div>
+        <div class="tl-role">Product Manager</div>
+        <div class="tl-org"><span class="zh">麻布數據科技 · 發票／金融數據平台</span><span class="en">Mabu Data · Invoice &amp; Fintech Data Platform</span></div>
+        <div class="tl-desc">
+          <span class="zh">定義信用卡回饋計算邏輯並整合全市場卡片數據，活躍用戶提升 10%；打造即時信用卡比較平台鎖定高消費族群；規劃以發票數據驅動的中小企業雲端 CRM。</span>
+          <span class="en">Defined reward-calculation logic integrating market-wide credit-card data (+10% active users), built a real-time card-comparison platform targeting high spenders, and planned an invoice-data-driven cloud CRM for SMEs.</span>
+        </div>
+        <div class="tl-kws"><span>Fintech Data</span><span>Calculation Logic</span><span>SME CRM</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ Work ============ -->
+<section id="work">
+  <div class="wrap">
+    <div class="eyebrow">Selected Work</div>
+    <h2 class="sec-h"><span class="zh">精選作品</span><span class="en">Case Studies</span></h2>
+    <p class="sec-sub">
+      <span class="zh">三個案例，三種能力切面：領域深度、端到端交付、系統思維。</span>
+      <span class="en">Three cases, three facets: domain depth, end-to-end delivery, systems thinking.</span>
+    </p>
+    <div class="work-grid">
+      <article class="case reveal">
+        <div class="icon">🔗</div>
+        <div class="role-tag">Flagship · Domain Depth</div>
+        <h3>FIX API / ACY Connect<span class="flag"><span class="zh">旗艦案例</span><span class="en">Flagship</span></span></h3>
+        <p>
+          <span class="zh">從協議文件到佣金邏輯：機構級 API 接入的產品規格與文件強化，涵蓋 ExecutionReport、訂單生命週期與計費規則。</span>
+          <span class="en">From protocol docs to commission logic: product specs and documentation for institutional API connectivity — ExecutionReport, order lifecycle, and fee rules.</span>
+        </p>
+        <div class="kws"><span>FIX Protocol</span><span>Institutional</span><span>API Design</span></div>
+        <a href="case-fix-api.html"><span class="zh">閱讀案例 →</span><span class="en">Read case →</span></a>
+      </article>
+
+      <article class="case reveal">
+        <div class="icon">📱</div>
+        <div class="role-tag">End-to-End Delivery</div>
+        <h3><span class="zh">證券 APP 重建</span><span class="en">Securities App Rebuild</span></h3>
+        <p>
+          <span class="zh">從資訊架構、規格、QA 回歸測試到雙平台上架與全量發布 — 一條完整的交付鏈，由一位 PM 貫穿。</span>
+          <span class="en">From information architecture and specs through QA regression to dual-store submission and full rollout — one delivery chain, carried end to end by one PM.</span>
+        </p>
+        <div class="kws"><span>Mobile</span><span>QA</span><span>App Store Release</span></div>
+        <a href="case-securities-app.html"><span class="zh">閱讀案例 →</span><span class="en">Read case →</span></a>
+      </article>
+
+      <article class="case reveal">
+        <div class="icon">🗝️</div>
+        <div class="role-tag">Systems Thinking</div>
+        <h3><span class="zh">後台權限系統</span><span class="en">Back-Office Permission System</span></h3>
+        <p>
+          <span class="zh">API Key 的 CRUD、scope 與到期機制：把「誰能做什麼」設計成可擴充的權限模型，而不是一次性的功能。</span>
+          <span class="en">API-key CRUD, scopes, and expiration: designing "who can do what" as an extensible permission model rather than a one-off feature.</span>
+        </p>
+        <div class="kws"><span>RBAC</span><span>API Keys</span><span>Security</span></div>
+        <a href="#"><span class="zh">閱讀案例 →</span><span class="en">Read case →</span></a>
+      </article>
+    </div>
+
+    <div class="more-title"><span class="zh">早期代表作</span><span class="en">Earlier Highlights</span></div>
+    <div class="more-sub"><span class="zh">交易平台之前的十年，我也做過這些。</span><span class="en">The decade before trading platforms.</span></div>
+    <div class="more-grid">
+      <div class="mini-work reveal">
+        <div class="h">Groups <span class="zh">社群功能</span><span class="en">Feature</span> 0→1</div>
+        <div class="m">beanfun! · 3× <span class="zh">停留時間</span><span class="en">retention time</span></div>
+        <p><span class="zh">從零打造核心生態系功能，Agile/Scrum 端到端交付。</span><span class="en">Core ecosystem feature built from scratch, delivered end-to-end with Agile/Scrum.</span></p>
+      </div>
+      <div class="mini-work reveal">
+        <div class="h"><span class="zh">信用卡回饋計算引擎</span><span class="en">Card Reward Calculator</span></div>
+        <div class="m">Invoice App · +10% <span class="zh">活躍用戶</span><span class="en">active users</span></div>
+        <p><span class="zh">定義計算邏輯、整合全市場信用卡數據 — 最早的「規則變規格」練習。</span><span class="en">Defined calculation logic over market-wide card data — my earliest "rules into specs" work.</span></p>
+      </div>
+      <div class="mini-work reveal">
+        <div class="h">MGM <span class="zh">跨產品導流後台</span><span class="en">Cross-promo Backend</span></div>
+        <div class="m">55688 · <span class="zh">集團生態系串接</span><span class="en">Group ecosystem link-up</span></div>
+        <p><span class="zh">設計 Member-Get-Member 後台，把多個產品的用戶流量互相導引。</span><span class="en">A Member-Get-Member backend routing users across multiple group products.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Skills ============ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow">Competency</div>
+    <h2 class="sec-h"><span class="zh">能力矩陣</span><span class="en">Competency Matrix</span></h2>
+    <p class="sec-sub">
+      <span class="zh">基於實際 Jira 交付紀錄整理的能力評估 — 每一條都有票號可以對應。</span>
+      <span class="en">A competency assessment grounded in actual Jira delivery records — every bar maps to real tickets.</span>
+    </p>
+    <div class="skill-grid">
+      <div class="skill-cell reveal">
+        <div class="row"><span class="name">Trading Domain</span><span class="pct">5.0 / 5</span></div>
+        <div class="progress"><div class="fill" style="width:100%"></div></div>
+        <div class="note"><span class="zh">訂單簿計價、佣金、FIX、公司行動</span><span class="en">Order-book pricing, commission, FIX, corporate actions</span></div>
+      </div>
+      <div class="skill-cell reveal">
+        <div class="row"><span class="name">Product Delivery</span><span class="pct">4.5 / 5</span></div>
+        <div class="progress"><div class="fill" style="width:90%"></div></div>
+        <div class="note"><span class="zh">規格 → QA → 上架 → 全量發布</span><span class="en">Spec → QA → store release → full rollout</span></div>
+      </div>
+      <div class="skill-cell reveal">
+        <div class="row"><span class="name">Systems Thinking</span><span class="pct">4.5 / 5</span></div>
+        <div class="progress"><div class="fill" style="width:90%"></div></div>
+        <div class="note"><span class="zh">邊界條件、狀態機、跨系統依賴</span><span class="en">Edge cases, state machines, cross-system dependencies</span></div>
+      </div>
+      <div class="skill-cell reveal">
+        <div class="row"><span class="name">Technical Knowledge</span><span class="pct">4.0 / 5</span></div>
+        <div class="progress"><div class="fill" style="width:80%"></div></div>
+        <div class="note"><span class="zh">API 規格、auth 流程、root cause 定位</span><span class="en">API specs, auth flows, root-cause analysis</span></div>
+      </div>
+      <div class="skill-cell reveal">
+        <div class="row"><span class="name">Cross-functional</span><span class="pct">4.0 / 5</span></div>
+        <div class="progress"><div class="fill" style="width:80%"></div></div>
+        <div class="note"><span class="zh">FE / BE / QA / Design 十人以上協作</span><span class="en">Coordinating 10+ across FE / BE / QA / Design</span></div>
+      </div>
+      <div class="skill-cell reveal">
+        <div class="row"><span class="name">AI Workflow</span><span class="pct"><span class="zh">建構中</span><span class="en">Building</span></span></div>
+        <div class="progress"><div class="fill" style="width:45%;background:var(--warning)"></div></div>
+        <div class="note"><span class="zh">Spec 生成、知識庫、自動化流程</span><span class="en">Spec generation, knowledge bases, automation</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Thoughts ============ -->
+<section id="thoughts">
+  <div class="wrap">
+    <div class="eyebrow">Thoughts</div>
+    <h2 class="sec-h"><span class="zh">文章</span><span class="en">Writing</span></h2>
+    <p class="sec-sub">
+      <span class="zh">關於系統思維、交易平台與產品方法論的筆記。</span>
+      <span class="en">Notes on systems thinking, trading platforms, and product methodology.</span>
+    </p>
+    <div class="thought-list">
+      <a class="thought reveal" href="#">
+        <span class="t"><span class="zh">一句需求澄清，如何省下一整個 Sprint</span><span class="en">How One Clarifying Question Saved an Entire Sprint</span></span>
+        <span class="d">2026.06</span>
+      </a>
+      <a class="thought reveal" href="#">
+        <span class="t"><span class="zh">Feature PM 看功能，Systems PM 看斷點</span><span class="en">Feature PMs See Features; Systems PMs See Breakpoints</span></span>
+        <span class="d">2026.05</span>
+      </a>
+      <a class="thought reveal" href="#">
+        <span class="t"><span class="zh">把 FIX 文件寫到工程師不用來問你</span><span class="en">Writing FIX Docs So Engineers Never Have to Ask</span></span>
+        <span class="d">2026.04</span>
+      </a>
+    </div>
+    <div class="alert">
+      <span class="i">i</span>
+      <span>
+        <span class="zh">以上文章為佔位標題 — 之後接上實際文章連結（Notion 公開頁或 blog）即可。</span>
+        <span class="en">Placeholder titles — swap in real article links (public Notion pages or a blog) later.</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Contact ============ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="card reveal">
+      <h2><span class="zh">正在尋找日本・新加坡的 PM 機會</span><span class="en">Open to PM Roles in Japan &amp; Singapore</span></h2>
+      <p>
+        <span class="zh">如果你的團隊需要一位懂交易平台底層、能把複雜系統寫成清楚規格的產品經理，我們聊聊。</span>
+        <span class="en">If your team needs a PM who understands the underside of trading platforms and turns complex systems into clear specs — let's talk.</span>
+      </p>
+      <a class="btn btn-primary" href="mailto:hello@example.com">Email Me</a>
+      &nbsp;
+      <a class="btn btn-secondary" href="#" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <span><span class="zh">用日系清新設計系統打造</span><span class="en">Built with the Japanese Clean design system</span></span>
+    <span class="sig">Bella Chen 2026/07/07</span>
+  </div>
+</footer>
+
+<script>
+  function setLang(l){
+    document.body.setAttribute('data-lang', l);
+    document.documentElement.lang = (l === 'zh') ? 'zh-Hant' : 'en';
+    document.getElementById('btn-zh').classList.toggle('on', l === 'zh');
+    document.getElementById('btn-en').classList.toggle('on', l === 'en');
+  }
+
+  // Scroll reveal
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

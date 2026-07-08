@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study 01 — Turning a Design into a Shippable Product | Bella Chen</title>
+<meta name="description" content="從設計稿到正式上線——讓交易 App 真正可以交付。A PM case study on turning a design into a shippable trading app.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ Japanese Clean Design Tokens ============ */
+  :root{
+    --white:#FFFFFF;
+    --sky:#B8E3FF;
+    --blue:#78C4FF;
+    --navy:#2D4059;
+    --sand:#F9F7F3;
+    --gray:#6B7280;
+    --success:#A7E3B1;
+    --warning:#FFD080;
+    --border:#E5E7EB;
+    --text-primary:#2D4059;
+    --text-secondary:#6B7280;
+    --caption:#9CA3AF;
+    --highlight:#78C4FF;
+    --primary-hover:#5BAFF9;
+    --grad-hero:linear-gradient(135deg,#FFFFFF 0%,#E6F4FF 50%,#B8E3FF 100%);
+    --grad-soft-blue:linear-gradient(135deg,#B8E3FF 0%,#78C4FF 100%);
+    --grad-warm-neutral:linear-gradient(135deg,#FFFFFF 0%,#F9F7F3 100%);
+    --radius:20px;
+    --shadow-card:0 10px 30px rgba(45,64,89,0.06);
+    --shadow-hover:0 14px 36px rgba(45,64,89,0.10);
+    --font:'Noto Sans TC','Inter',-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+  body{font-family:var(--font);background:var(--sand);color:var(--text-primary);line-height:1.9;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:0 28px}
+  .wrap-wide{max-width:980px;margin:0 auto;padding:0 28px}
+  a{color:var(--highlight)}
+
+  [data-lang="en"] .zh{display:none}
+  [data-lang="zh"] .en{display:none}
+
+  /* ============ Nav ============ */
+  nav{position:sticky;top:0;z-index:20;background:rgba(249,247,243,0.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .nav-in{max-width:980px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+  .logo{color:var(--blue);font-weight:700;font-size:18px;text-decoration:none}
+  .back{font-size:14px;color:var(--text-secondary);text-decoration:none}
+  .back:hover{color:var(--navy)}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .lang-toggle{display:flex;border:1.5px solid var(--sky);border-radius:999px;overflow:hidden;background:var(--white)}
+  .lang-toggle button{border:none;background:none;font-family:var(--font);font-size:12.5px;font-weight:600;padding:5px 13px;cursor:pointer;color:var(--text-secondary);transition:background .2s,color .2s}
+  .lang-toggle button.on{background:var(--blue);color:var(--white)}
+
+  /* ============ Case hero ============ */
+  .case-hero{background:var(--grad-hero);border-bottom:1px solid var(--border);padding:84px 0 64px}
+  .eyebrow{font-family:'Inter',monospace;font-size:13px;letter-spacing:2.5px;color:var(--blue);font-weight:600;text-transform:uppercase;margin-bottom:14px}
+  .case-hero h1{font-size:clamp(28px,4.6vw,42px);line-height:1.4;font-weight:700;max-width:640px}
+  .case-hero .subtitle{margin-top:12px;font-size:17px;color:var(--text-secondary);max-width:600px}
+  .meta{margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;row-gap:10px}
+  .meta div{display:flex;align-items:baseline;gap:10px;padding:0 26px;border-left:1px solid var(--border)}
+  .meta div:first-child{padding-left:0;border-left:none}
+  .meta .k{font-size:12px;letter-spacing:1.5px;color:var(--caption);text-transform:uppercase;font-family:'Inter',monospace}
+  .meta .v{font-size:15px;font-weight:600}
+
+  /* ============ Article ============ */
+  article{padding:72px 0 40px}
+  .sec{margin-bottom:64px}
+  .sec-label{font-family:'Inter',monospace;font-size:12.5px;letter-spacing:2px;color:var(--blue);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+  .sec h2{font-size:24px;font-weight:700;margin-bottom:18px}
+  .sec p{color:var(--text-secondary);font-size:15.5px;margin-bottom:16px}
+  .sec p strong{color:var(--text-primary)}
+  .lede{font-size:17px!important;color:var(--text-primary)!important}
+
+  .quote-card{background:var(--white);border-left:4px solid var(--blue);border-radius:0 16px 16px 0;box-shadow:var(--shadow-card);padding:22px 26px;margin:26px 0;font-size:15px;color:var(--text-primary)}
+
+  ul.q-list{list-style:none;margin:22px 0}
+  ul.q-list li{position:relative;padding:11px 0 11px 30px;color:var(--text-secondary);font-size:15px;border-bottom:1px solid var(--border)}
+  ul.q-list li:last-child{border-bottom:none}
+  ul.q-list li::before{content:"?";position:absolute;left:2px;top:10px;width:20px;height:20px;border-radius:50%;background:var(--sky);color:var(--navy);font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Inter',monospace}
+
+  .work-blocks{display:grid;gap:16px;margin-top:26px}
+  .wb{background:var(--white);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-card);padding:24px 26px}
+  .wb .n{font-family:'Inter',monospace;font-size:12px;color:var(--blue);font-weight:600;letter-spacing:1px}
+  .wb h3{font-size:16.5px;margin:5px 0 8px}
+  .wb p{font-size:14px;margin:0}
+
+  .decision{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:28px 30px;margin-bottom:18px}
+  .decision h3{font-size:17px;margin-bottom:10px;display:flex;gap:10px;align-items:baseline}
+  .decision h3 .dot{width:9px;height:9px;border-radius:50%;background:var(--grad-soft-blue);flex:none;transform:translateY(-2px)}
+  .decision p{font-size:14.5px;color:var(--text-secondary);margin-bottom:10px}
+  .decision p:last-child{margin-bottom:0}
+  .decision .why{background:var(--sand);border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-size:13.5px;color:var(--text-primary);margin-top:12px}
+  .decision .why b{color:var(--blue)}
+
+  .outcome-card{background:var(--grad-warm-neutral);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:32px 34px}
+  .outcome-card p{font-size:15.5px}
+  .outcome-card p:last-child{margin-bottom:0}
+
+  .habit{background:var(--white);border:1px solid var(--sky);border-radius:16px;padding:22px 26px;margin-top:22px}
+  .habit .t{font-weight:700;font-size:14.5px;margin-bottom:10px;color:var(--navy)}
+  .habit ul{list-style:none}
+  .habit li{position:relative;padding:7px 0 7px 26px;font-size:14.5px;color:var(--text-secondary)}
+  .habit li::before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:700}
+
+  /* ============ Footer CTA ============ */
+  .cta{padding:24px 0 88px}
+  .cta-card{background:var(--grad-hero);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:40px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .cta-card .t{font-size:19px;font-weight:700}
+  .btn{display:inline-block;font-family:var(--font);font-size:14px;font-weight:600;border-radius:999px;padding:10px 24px;cursor:pointer;text-decoration:none;transition:background .2s}
+  .btn-primary{background:var(--blue);color:var(--white);border:none}
+  .btn-primary:hover{background:var(--primary-hover)}
+
+  footer{border-top:1px solid var(--border);padding:26px 0;background:var(--sand)}
+  .foot-in{max-width:980px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--caption);font-size:13px}
+  .foot-in .sig{font-family:'Inter',monospace;letter-spacing:.5px}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.vis{opacity:1;transform:none}
+</style>
+</head>
+<body data-lang="zh">
+
+<nav>
+  <div class="nav-in">
+    <a class="back" href="index.html#work">← <span class="zh">回到作品</span><span class="en">Back to Work</span></a>
+    <a class="logo" href="index.html">Bella</a>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button id="btn-zh" class="on" onclick="setLang('zh')">中</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ Hero ============ -->
+<header class="case-hero">
+  <div class="wrap-wide">
+    <div class="eyebrow">Case Study 01</div>
+    <h1>
+      <span class="zh">從設計稿到正式上線<br>讓交易 App 真正可以交付</span>
+      <span class="en">Turning a Design into<br>a Shippable Product</span>
+    </h1>
+    <p class="subtitle">
+      <span class="zh">Turning a Design into a Shippable Product</span>
+      <span class="en">Taking a trading app from Happy-Path mockups to a fully specified, released product.</span>
+    </p>
+    <div class="meta">
+      <div><div class="k"><span class="zh">產品</span><span class="en">Product</span></div><div class="v"><span class="zh">證券交易 App</span><span class="en">Securities Trading App</span></div></div>
+      <div><div class="k"><span class="zh">期間</span><span class="en">Timeline</span></div><div class="v">2025 — 2026</div></div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+
+    <!-- Background -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">專案背景</span><span class="en">Background</span></div>
+      <h2><span class="zh">一個可以 Demo，卻很難交付的產品</span><span class="en">A Product That Could Demo, but Couldn't Ship</span></h2>
+      <p class="lede">
+        <span class="zh">2025 年初，我開始接手公司的交易 App。這個 App 並不是從零開始 — 外包團隊已經完成第一版產品，也完成了大部分功能。</span>
+        <span class="en">In early 2025, I took over the company's trading app. It wasn't a greenfield project — an outsourced team had already delivered a first version with most features in place.</span>
+      </p>
+      <p>
+        <span class="zh">然而，當團隊準備接手持續開發時，很快就發現，產品雖然可以 Demo，卻很難真正交付。很多流程缺乏完整定義，使用體驗不一致，部分畫面與 Backend API 不符，許多功能只有 Happy Path，缺少實際開發所需要的各種產品規則。</span>
+        <span class="en">But as our team prepared to take over ongoing development, we quickly realized the product could be demoed but was very hard to actually ship. Many flows were incompletely defined. The experience was inconsistent. Some screens didn't match the backend APIs. Most features only covered the Happy Path, missing the product rules real development requires.</span>
+      </p>
+      <p>
+        <span class="zh">因此，產品團隊決定重新設計整體介面。設計師重新繪製了一版新的 App — 但仍然只有 Happy Path。</span>
+        <span class="en">The product team decided to redesign the entire interface. Our designer produced a fresh version of the app — but it, too, only covered the Happy Path.</span>
+      </p>
+      <div class="quote-card">
+        <span class="zh">而我接手的工作，就是把這份設計稿，變成真正可以被工程實作、測試與上線的產品。</span>
+        <span class="en">My job was to turn that design file into a product that could actually be built, tested, and released.</span>
+      </div>
+    </section>
+
+    <!-- Challenge -->
+    <section class="sec reveal">
+      <div class="sec-label">Challenge</div>
+      <h2><span class="zh">設計稿回答不了工程師的問題</span><span class="en">The Design Couldn't Answer the Engineers' Questions</span></h2>
+      <p>
+        <span class="zh">我很快發現，真正困難的並不是新增功能，而是設計稿回答不了工程師真正需要知道的問題。例如：</span>
+        <span class="en">I quickly found that the hard part wasn't adding features — it was that the design couldn't answer the questions engineers actually needed answered. For example:</span>
+      </p>
+      <ul class="q-list">
+        <li><span class="zh">API 回傳不同資料時，畫面要怎麼顯示？</span><span class="en">How should the screen render when the API returns different data?</span></li>
+        <li><span class="zh">Loading、Error、Empty State 怎麼處理？</span><span class="en">How are Loading, Error, and Empty states handled?</span></li>
+        <li><span class="zh">沒有權限時要看到什麼？</span><span class="en">What does a user without permission see?</span></li>
+        <li><span class="zh">哪些狀態需要提示使用者？</span><span class="en">Which states need to notify the user?</span></li>
+        <li><span class="zh">同一個功能在不同市場是否有不同規則？</span><span class="en">Does the same feature follow different rules in different markets?</span></li>
+      </ul>
+      <p>
+        <span class="zh"><strong>如果沒有這些定義，每位工程師都可能做出不同版本。</strong></span>
+        <span class="en"><strong>Without these definitions, every engineer could end up building a different version.</strong></span>
+      </p>
+    </section>
+
+    <!-- My Role -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">我的工作</span><span class="en">My Role</span></div>
+      <h2><span class="zh">不是從功能開始，而是先建立產品規格</span><span class="en">Not Features First — Specifications First</span></h2>
+      <p>
+        <span class="zh">因此，我沒有從功能開始，而是先建立產品規格。我負責把 Happy Path 補齊成完整的 Product Specification。</span>
+        <span class="en">So I didn't start with features. I started by building the product specification — expanding the Happy Path into a complete Product Specification.</span>
+      </p>
+      <div class="work-blocks">
+        <div class="wb">
+          <div class="n">01</div>
+          <h3><span class="zh">補齊產品規格</span><span class="en">Completing the Specification</span></h3>
+          <p><span class="zh">與設計師一起完成所有 Edge Cases、Loading、Error Handling、Display Rules 與例外流程，讓每個畫面都有明確規則。</span><span class="en">Worked with the designer to define every edge case, loading state, error handling rule, display rule, and exception flow — so every screen had explicit rules.</span></p>
+        </div>
+        <div class="wb">
+          <div class="n">02</div>
+          <h3><span class="zh">對齊 UI 與 Backend</span><span class="en">Aligning UI with Backend</span></h3>
+          <p><span class="zh">重新確認每個畫面的 API Mapping。與 Backend 一起確認資料來源，再重新調整畫面顯示方式，而不是要求工程修改 API 配合設計。</span><span class="en">Re-verified the API mapping for every screen. Confirmed data sources with the backend team, then adjusted how screens displayed data — rather than asking engineering to change APIs to fit the design.</span></p>
+        </div>
+        <div class="wb">
+          <div class="n">03</div>
+          <h3><span class="zh">建立一致的產品規則</span><span class="en">Building Consistent Product Structure</span></h3>
+          <p><span class="zh">隨著功能增加，我重新整理既有 Feature 的分類方式，讓後續需求有一致的產品結構，也降低跨團隊溝通成本。</span><span class="en">As features grew, I reorganized how existing features were categorized, giving later requirements a consistent product structure and lowering cross-team communication cost.</span></p>
+        </div>
+        <div class="wb">
+          <div class="n">04</div>
+          <h3><span class="zh">推動產品上線</span><span class="en">Driving the Release</span></h3>
+          <p><span class="zh">參與整個 Release Planning：Apple App Store Review、不同市場版本策略、Release 時程安排與跨團隊協調。</span><span class="en">Took part in the full release planning: Apple App Store review, per-market version strategy, release scheduling, and cross-team coordination.</span></p>
+        </div>
+      </div>
+      <div class="quote-card" style="margin-top:26px">
+        <span class="zh">我的工作，不只是完成需求。更重要的是，讓產品真正可以交付。</span>
+        <span class="en">My job wasn't just to complete requirements — it was to make the product genuinely shippable.</span>
+      </div>
+    </section>
+
+    <!-- Key Decisions -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">代表性產品決策</span><span class="en">Key Product Decisions</span></div>
+      <h2><span class="zh">三個決策，三種取捨</span><span class="en">Three Decisions, Three Trade-offs</span></h2>
+
+      <div class="decision">
+        <h3><span class="dot"></span><span class="zh">當 Backend 支援即時更新後，優先改善核心交易體驗</span><span class="en">When the Backend Supported Real-time Updates, Core Trading Experience Came First</span></h3>
+        <p><span class="zh">原本 Equity、P&amp;L 等帳戶資訊每十五分鐘才更新一次。當 Backend 已支援即時更新後，我調整產品優先順序，優先推動帳戶資訊即時刷新。</span><span class="en">Account information like Equity and P&amp;L originally refreshed only every fifteen minutes. Once the backend supported real-time updates, I reprioritized the roadmap to bring real-time account data first.</span></p>
+        <div class="why"><b><span class="zh">為什麼：</span><span class="en">Why:</span></b> <span class="zh">對交易產品而言，資訊是否可信，比增加更多功能更重要。</span><span class="en">For a trading product, whether information can be trusted matters more than adding features.</span></div>
+      </div>
+
+      <div class="decision">
+        <h3><span class="dot"></span><span class="zh">同一個產品，兩種登入策略</span><span class="en">One Product, Two Login Strategies</span></h3>
+        <p><span class="zh">由於歷史架構限制，全球版本仍使用 Web Login；中國版本則改採 Native Login，並加入生物辨識登入。我負責定義兩套登入流程、畫面規則、Edge Cases 與產品 Scope，讓不同市場都能維持一致的使用體驗。</span><span class="en">Due to legacy architecture constraints, the global version kept Web Login, while the China version moved to Native Login with biometric authentication. I defined both login flows — screens, rules, edge cases, and scope — so each market kept a consistent experience.</span></p>
+        <div class="why"><b><span class="zh">為什麼：</span><span class="en">Why:</span></b> <span class="zh">市場條件不同時，一致的「體驗」比一致的「實作」更重要。</span><span class="en">When market conditions differ, a consistent experience matters more than a consistent implementation.</span></div>
+      </div>
+
+      <div class="decision">
+        <h3><span class="dot"></span><span class="zh">用 Release Strategy 解決 App Store 上架問題</span><span class="en">Solving App Store Approval with Release Strategy</span></h3>
+        <p><span class="zh">金融產品上架除了功能完成之外，還需要符合不同市場的法規與 Apple Review 要求。我參與規劃版本策略與 Release 時程，協助團隊降低 App Review 帶來的不確定性，讓產品能順利完成 Rollout。</span><span class="en">Shipping a financial product isn't just about finishing features — it must satisfy market regulations and Apple's review requirements. I helped plan the version strategy and release schedule, reducing the uncertainty of App Review so the product could complete its rollout.</span></p>
+        <div class="why"><b><span class="zh">為什麼：</span><span class="en">Why:</span></b> <span class="zh">上架審核是產品問題，不只是流程問題 — 它需要被設計，而不是被等待。</span><span class="en">App review is a product problem, not just a process problem — it needs to be designed for, not waited on.</span></div>
+      </div>
+    </section>
+
+    <!-- Outcome -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">結果</span><span class="en">Outcome</span></div>
+      <h2><span class="zh">第一次擁有一套完整且一致的產品規格</span><span class="en">The Product's First Complete, Consistent Specification</span></h2>
+      <div class="outcome-card">
+        <p>
+          <span class="zh">經過一年多的迭代，產品正式完成 Rollout。</span>
+          <span class="en">After more than a year of iteration, the product completed its full rollout.</span>
+        </p>
+        <p>
+          <span class="zh">回頭來看，我最大的貢獻並不是新增了多少功能，而是讓產品第一次擁有一套完整且一致的產品規格 — 讓設計、工程與 Backend 都能依照相同的規則協作，也讓後續功能能建立在一致的基礎上持續演進。</span>
+          <span class="en">Looking back, my biggest contribution wasn't the number of features added. It was giving the product its first complete and consistent specification — one that let design, engineering, and backend collaborate by the same rules, and let every later feature evolve on a consistent foundation.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Reflection -->
+    <section class="sec reveal">
+      <div class="sec-label">Reflection</div>
+      <h2><span class="zh">PM 的價值，是建立規則</span><span class="en">A PM's Value Is Building the Rules</span></h2>
+      <p>
+        <span class="zh">這個專案讓我重新理解 Product Manager 的價值。一開始，我以為 PM 的工作是規劃功能。但真正參與產品落地後，我發現更重要的是建立規則。</span>
+        <span class="en">This project changed how I understand a Product Manager's value. I used to think a PM's job was planning features. After carrying a product all the way to launch, I found what matters more is building the rules.</span>
+      </p>
+      <p>
+        <span class="zh">設計可以畫出理想流程。Backend 可以提供資料。工程可以完成開發。而 PM 的工作，是把這些不同角色的觀點整合成一套所有人都能共同理解的產品規格。</span>
+        <span class="en">Design can draw the ideal flow. Backend can provide the data. Engineering can build it. The PM's job is to integrate those perspectives into one product specification everyone can understand together.</span>
+      </p>
+      <p>
+        <span class="zh">也是從這個專案開始，我養成了一個習慣。每接手一個功能，我不會先問「這個功能怎麼做？」，而是先問：</span>
+        <span class="en">This project is also where I formed a habit. Whenever I take on a feature, I no longer start by asking "how do we build this?" — I start by asking:</span>
+      </p>
+      <div class="habit">
+        <div class="t"><span class="zh">接手任何功能前，我會先確認</span><span class="en">Before any feature, I first confirm</span></div>
+        <ul>
+          <li><span class="zh">設計是否真的可以被開發？</span><span class="en">Can this design actually be built?</span></li>
+          <li><span class="zh">API 是否支援？</span><span class="en">Do the APIs support it?</span></li>
+          <li><span class="zh">所有狀態都有定義嗎？</span><span class="en">Is every state defined?</span></li>
+          <li><span class="zh">是否考慮了所有例外情境？</span><span class="en">Have all the exception scenarios been considered?</span></li>
+        </ul>
+      </div>
+      <p style="margin-top:22px">
+        <span class="zh">因為我相信，一個成熟的產品，不是因為功能很多，而是因為每一次迭代，都建立在一套清楚且一致的產品規則之上。</span>
+        <span class="en">Because I believe a mature product isn't one with the most features — it's one where every iteration is built on a clear, consistent set of product rules.</span>
+      </p>
+    </section>
+
+  </div>
+</article>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="wrap-wide">
+    <div class="cta-card">
+      <div class="t"><span class="zh">想看更多案例，或聊聊這個專案？</span><span class="en">Want more cases, or to talk about this project?</span></div>
+      <div>
+        <a class="btn btn-primary" href="case-fix-api.html"><span class="zh">下一個案例 · Building ACY Connect →</span><span class="en">Next case · Building ACY Connect →</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <span>Case Study 01 · <span class="zh">從設計稿到正式上線</span><span class="en">Turning a Design into a Shippable Product</span></span>
+    <span class="sig">Bella Chen 2026/07/07</span>
+  </div>
+</footer>
+
+<script>
+  function setLang(l){
+    document.body.setAttribute('data-lang', l);
+    document.documentElement.lang = (l === 'zh') ? 'zh-Hant' : 'en';
+    document.getElementById('btn-zh').classList.toggle('on', l === 'zh');
+    document.getElementById('btn-en').classList.toggle('on', l === 'en');
+  }
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

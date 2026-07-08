@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study 02 — Building ACY Connect · FIX API | Bella Chen</title>
+<meta name="description" content="從零理解機構交易基礎設施，打造公司的第一個 Institutional Product。A PM case study on building a FIX API institutional product.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ Japanese Clean Design Tokens ============ */
+  :root{
+    --white:#FFFFFF;
+    --sky:#B8E3FF;
+    --blue:#78C4FF;
+    --navy:#2D4059;
+    --sand:#F9F7F3;
+    --gray:#6B7280;
+    --success:#A7E3B1;
+    --warning:#FFD080;
+    --border:#E5E7EB;
+    --text-primary:#2D4059;
+    --text-secondary:#6B7280;
+    --caption:#9CA3AF;
+    --highlight:#78C4FF;
+    --primary-hover:#5BAFF9;
+    --grad-hero:linear-gradient(135deg,#FFFFFF 0%,#E6F4FF 50%,#B8E3FF 100%);
+    --grad-soft-blue:linear-gradient(135deg,#B8E3FF 0%,#78C4FF 100%);
+    --grad-warm-neutral:linear-gradient(135deg,#FFFFFF 0%,#F9F7F3 100%);
+    --radius:20px;
+    --shadow-card:0 10px 30px rgba(45,64,89,0.06);
+    --shadow-hover:0 14px 36px rgba(45,64,89,0.10);
+    --font:'Noto Sans TC','Inter',-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+  body{font-family:var(--font);background:var(--sand);color:var(--text-primary);line-height:1.9;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:0 28px}
+  .wrap-wide{max-width:980px;margin:0 auto;padding:0 28px}
+  a{color:var(--highlight)}
+
+  [data-lang="en"] .zh{display:none}
+  [data-lang="zh"] .en{display:none}
+
+  /* ============ Nav ============ */
+  nav{position:sticky;top:0;z-index:20;background:rgba(249,247,243,0.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .nav-in{max-width:980px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+  .logo{color:var(--blue);font-weight:700;font-size:18px;text-decoration:none}
+  .back{font-size:14px;color:var(--text-secondary);text-decoration:none}
+  .back:hover{color:var(--navy)}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .lang-toggle{display:flex;border:1.5px solid var(--sky);border-radius:999px;overflow:hidden;background:var(--white)}
+  .lang-toggle button{border:none;background:none;font-family:var(--font);font-size:12.5px;font-weight:600;padding:5px 13px;cursor:pointer;color:var(--text-secondary);transition:background .2s,color .2s}
+  .lang-toggle button.on{background:var(--blue);color:var(--white)}
+
+  /* ============ Case hero ============ */
+  .case-hero{background:var(--grad-hero);border-bottom:1px solid var(--border);padding:84px 0 64px}
+  .eyebrow{font-family:'Inter',monospace;font-size:13px;letter-spacing:2.5px;color:var(--blue);font-weight:600;text-transform:uppercase;margin-bottom:14px}
+  .case-hero h1{font-size:clamp(28px,4.6vw,42px);line-height:1.4;font-weight:700;max-width:680px}
+  .case-hero .subtitle{margin-top:12px;font-size:17px;color:var(--text-secondary);max-width:640px}
+  .meta{margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;row-gap:10px}
+  .meta div{display:flex;align-items:baseline;gap:10px;padding:0 26px;border-left:1px solid var(--border)}
+  .meta div:first-child{padding-left:0;border-left:none}
+  .meta .k{font-size:12px;letter-spacing:1.5px;color:var(--caption);text-transform:uppercase;font-family:'Inter',monospace}
+  .meta .v{font-size:15px;font-weight:600}
+  .hero-tags{margin-top:20px;display:flex;gap:8px;flex-wrap:wrap}
+  .hero-tags span{font-size:12.5px;background:var(--white);border:1px solid var(--border);color:var(--text-secondary);border-radius:999px;padding:4px 14px}
+
+  /* ============ Article ============ */
+  article{padding:72px 0 40px}
+  .sec{margin-bottom:64px}
+  .sec-label{font-family:'Inter',monospace;font-size:12.5px;letter-spacing:2px;color:var(--blue);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+  .sec h2{font-size:24px;font-weight:700;margin-bottom:18px}
+  .sec h3.sub{font-size:17px;font-weight:700;margin:30px 0 12px}
+  .sec p{color:var(--text-secondary);font-size:15.5px;margin-bottom:16px}
+  .sec p strong{color:var(--text-primary)}
+  .lede{font-size:17px!important;color:var(--text-primary)!important}
+
+  .quote-card{background:var(--white);border-left:4px solid var(--blue);border-radius:0 16px 16px 0;box-shadow:var(--shadow-card);padding:22px 26px;margin:26px 0;font-size:15px;color:var(--text-primary)}
+  .quote-card.big{font-size:16.5px;font-weight:600}
+
+  ul.q-list{list-style:none;margin:22px 0}
+  ul.q-list li{position:relative;padding:11px 0 11px 30px;color:var(--text-secondary);font-size:15px;border-bottom:1px solid var(--border)}
+  ul.q-list li:last-child{border-bottom:none}
+  ul.q-list li::before{content:"?";position:absolute;left:2px;top:10px;width:20px;height:20px;border-radius:50%;background:var(--sky);color:var(--navy);font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Inter',monospace}
+
+  ul.dash{list-style:none;margin:16px 0}
+  ul.dash li{position:relative;padding:6px 0 6px 22px;color:var(--text-secondary);font-size:14.5px}
+  ul.dash li::before{content:"—";position:absolute;left:0;color:var(--blue);font-weight:600}
+
+  .decision{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:28px 30px;margin-bottom:20px}
+  .decision .num{font-family:'Inter',monospace;font-size:12px;color:var(--blue);font-weight:600;letter-spacing:1px}
+  .decision h3{font-size:17.5px;margin:5px 0 12px}
+  .decision p{font-size:14.5px;color:var(--text-secondary);margin-bottom:12px}
+  .decision p:last-child{margin-bottom:0}
+  .decision .lesson{background:var(--sand);border:1px solid var(--border);border-radius:12px;padding:13px 17px;font-size:14px;color:var(--text-primary);margin-top:14px}
+  .decision .lesson b{color:var(--blue)}
+
+  /* Model comparison diagram */
+  .model-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin:20px 0 6px}
+  @media(max-width:600px){.model-compare{grid-template-columns:1fr;gap:10px}.model-arrow{transform:rotate(90deg)}}
+  .model-box{border:1.5px dashed var(--border);border-radius:14px;padding:16px;text-align:center}
+  .model-box .cap{font-size:11.5px;letter-spacing:1.5px;color:var(--caption);text-transform:uppercase;font-family:'Inter',monospace;margin-bottom:10px}
+  .chip{display:block;background:var(--sand);border:1px solid var(--border);border-radius:10px;padding:8px;font-size:13.5px;font-weight:600;margin-bottom:8px}
+  .chip:last-child{margin-bottom:0}
+  .model-box.good{border:1.5px solid var(--sky);background:#F4FAFF}
+  .model-box.good .outer{background:var(--white);border:1px solid var(--sky);border-radius:12px;padding:10px}
+  .model-box.good .outer .t{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:8px}
+  .model-box.good .outer .chip{margin:0 0 8px}
+  .model-arrow{font-size:20px;color:var(--blue);text-align:center}
+
+  .deliver-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:8px}
+  .dg{background:var(--white);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-card);padding:22px 24px}
+  .dg .h{font-weight:700;font-size:14.5px;margin-bottom:10px;color:var(--navy)}
+  .dg ul{list-style:none}
+  .dg li{position:relative;padding:5px 0 5px 20px;font-size:13.5px;color:var(--text-secondary)}
+  .dg li::before{content:"·";position:absolute;left:4px;color:var(--blue);font-weight:700;font-size:18px;line-height:1.2}
+
+  .outcome-card{background:var(--grad-warm-neutral);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:32px 34px}
+  .outcome-card p{font-size:15.5px}
+  .outcome-card ul{list-style:none;margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 24px}
+  .outcome-card li{position:relative;padding:6px 0 6px 24px;font-size:14px;color:var(--text-secondary)}
+  .outcome-card li::before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:700}
+
+  .habit{background:var(--white);border:1px solid var(--sky);border-radius:16px;padding:22px 26px;margin-top:22px}
+  .habit .t{font-weight:700;font-size:14.5px;margin-bottom:10px;color:var(--navy)}
+  .habit ol{margin-left:20px;color:var(--text-secondary);font-size:14.5px}
+  .habit ol li{padding:5px 0}
+
+  /* ============ Footer CTA ============ */
+  .cta{padding:24px 0 88px}
+  .cta-card{background:var(--grad-hero);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:40px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .cta-card .t{font-size:19px;font-weight:700}
+  .btn{display:inline-block;font-family:var(--font);font-size:14px;font-weight:600;border-radius:999px;padding:10px 24px;cursor:pointer;text-decoration:none;transition:background .2s;margin-left:10px}
+  .btn-primary{background:var(--blue);color:var(--white);border:none}
+  .btn-primary:hover{background:var(--primary-hover)}
+  .btn-secondary{background:var(--white);color:var(--blue);border:1.5px solid var(--sky)}
+  .btn-secondary:hover{background:#F2FAFF}
+
+  footer{border-top:1px solid var(--border);padding:26px 0;background:var(--sand)}
+  .foot-in{max-width:980px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--caption);font-size:13px}
+  .foot-in .sig{font-family:'Inter',monospace;letter-spacing:.5px}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.vis{opacity:1;transform:none}
+</style>
+</head>
+<body data-lang="zh">
+
+<nav>
+  <div class="nav-in">
+    <a class="back" href="index.html#work">← <span class="zh">回到作品</span><span class="en">Back to Work</span></a>
+    <a class="logo" href="index.html">Bella</a>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button id="btn-zh" class="on" onclick="setLang('zh')">中</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ Hero ============ -->
+<header class="case-hero">
+  <div class="wrap-wide">
+    <div class="eyebrow">Case Study 02</div>
+    <h1>
+      <span class="zh">Building ACY Connect — FIX API</span>
+      <span class="en">Building ACY Connect — FIX API</span>
+    </h1>
+    <p class="subtitle">
+      <span class="zh">從零理解機構交易基礎設施，打造公司的第一個 Institutional Product。</span>
+      <span class="en">Understanding institutional trading infrastructure from zero — and building the company's first institutional product.</span>
+    </p>
+    <div class="meta">
+      <div><div class="k"><span class="zh">產品</span><span class="en">Product</span></div><div class="v">ACY Connect · FIX API</div></div>
+      <div><div class="k"><span class="zh">期間</span><span class="en">Timeline</span></div><div class="v">2025</div></div>
+    </div>
+    <div class="hero-tags">
+      <span>Institutional Trading</span><span>FIX Protocol</span><span>Trading Infrastructure</span><span>Systems PM</span><span>Product Discovery</span>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+
+    <!-- Background -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">專案背景</span><span class="en">Background</span></div>
+      <h2><span class="zh">一個沒有畫面的產品</span><span class="en">A Product with No Screens</span></h2>
+      <p class="lede">
+        <span class="zh">2025 年，公司開始規劃進入 Institutional Trading 市場。</span>
+        <span class="en">In 2025, the company decided to enter the institutional trading market.</span>
+      </p>
+      <p>
+        <span class="zh">過去公司的產品主要服務零售交易者（Retail Traders），例如 Trading Platform、Web Platform 與 Mobile App；但 CEO 希望公司能開始服務更多機構級客戶，例如 Broker、Liquidity Provider、Quant Fund 等，因此決定打造第一個 FIX API 產品 —— ACY Connect。</span>
+        <span class="en">Our products had always served retail traders — a trading platform, a web platform, a mobile app. But the CEO wanted to serve institutional clients: brokers, liquidity providers, quant funds. So the company set out to build its first FIX API product — ACY Connect.</span>
+      </p>
+      <p>
+        <span class="zh">這是一個和我過去經驗完全不同的產品。它沒有 Chart，沒有下單畫面，沒有一般交易者熟悉的 UI。<strong>它的使用者，是另一套交易系統。</strong>這也是我第一次真正接觸 Trading Infrastructure。</span>
+        <span class="en">It was unlike anything I had worked on. No charts. No order screens. No UI a trader would recognize. <strong>Its user is another trading system.</strong> This was my first real encounter with trading infrastructure.</span>
+      </p>
+    </section>
+
+    <!-- First reaction -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">起點</span><span class="en">Starting Point</span></div>
+      <h2><span class="zh">我的第一個反應，不是開始寫 PRD</span><span class="en">My First Reaction Wasn't to Write a PRD</span></h2>
+      <p>
+        <span class="zh">當 CEO 告訴我「我們要開始做 ACY Connect，進入 Institutional Market」，我的第一個反應其實不是開始規劃功能，而是四個問題：</span>
+        <span class="en">When the CEO told me "we're building ACY Connect and entering the institutional market," my first reaction wasn't to plan features. It was four questions:</span>
+      </p>
+      <ul class="q-list">
+        <li><span class="zh">FIX 是什麼？</span><span class="en">What is FIX?</span></li>
+        <li><span class="zh">Institutional 和 Retail 到底差在哪？</span><span class="en">How exactly is institutional different from retail?</span></li>
+        <li><span class="zh">為什麼公司想做這個產品？</span><span class="en">Why does the company want this product?</span></li>
+        <li><span class="zh">如果我自己都不了解，又怎麼可能設計出讓客戶理解的產品？</span><span class="en">If I don't understand it myself, how could I possibly design a product clients can understand?</span></li>
+      </ul>
+      <p>
+        <span class="zh">因此，我沒有急著寫需求，而是先開始理解整個市場。我閱讀 FIX Protocol 文件、研究 Institutional Trading 架構、了解 Broker、Liquidity Provider 與 Institutional Client 的合作方式，也研究 PrimeXM、OneZero、IG 等競品的公開文件與產品設計。另一方面，我也持續和 Tech Lead 討論技術架構，理解 FIX Session、Port、Connection 等概念。</span>
+        <span class="en">So instead of rushing into requirements, I started by understanding the market. I read the FIX Protocol documentation, studied institutional trading architecture, learned how brokers, liquidity providers, and institutional clients work together, and analyzed the public documentation and product design of PrimeXM, OneZero, and IG. In parallel, I kept discussing the technical architecture with our Tech Lead — FIX sessions, ports, connections.</span>
+      </p>
+      <div class="quote-card">
+        <span class="zh">我的目標不是變成工程師，而是理解足夠多，讓我可以做出正確的產品決策。</span>
+        <span class="en">My goal wasn't to become an engineer — it was to understand enough to make the right product decisions.</span>
+      </div>
+    </section>
+
+    <!-- Biggest insight -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">我最大的收穫</span><span class="en">The Key Insight</span></div>
+      <h2><span class="zh">FIX 不是神祕的技術，而是一套共同語言</span><span class="en">FIX Isn't Mysterious Technology — It's a Shared Language</span></h2>
+      <p>
+        <span class="zh">一開始，我一直覺得 FIX 非常複雜。直到真正開始閱讀 FIX Specification，我突然理解一件事情：<strong>FIX 並不是一套神祕的技術。</strong>它本質上是一套共同遵守的資料格式。每一個欄位都有固定的定義，只要 Client 與 Server 對每一個欄位都有相同的理解，就能完成串接。</span>
+        <span class="en">At first, FIX felt impossibly complex. Then I actually started reading the FIX specification, and something clicked: <strong>FIX is not mysterious technology.</strong> At its core, it's a data format everyone agrees to follow. Every field has a fixed definition — as long as client and server share the same understanding of each field, the integration works.</span>
+      </p>
+      <div class="quote-card big">
+        <span class="zh">那一刻，我突然理解 PM 在 Infrastructure Product 裡真正的工作：不是設計交易引擎，不是實作 FIX，而是把複雜的技術規則，整理成客戶能理解、工程師能實作的產品。</span>
+        <span class="en">That was when I understood a PM's real job in an infrastructure product: not designing the trading engine, not implementing FIX — but organizing complex technical rules into a product that clients can understand and engineers can build.</span>
+      </div>
+    </section>
+
+    <!-- My role -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">我的角色</span><span class="en">My Role</span></div>
+      <h2><span class="zh">一座橋樑</span><span class="en">A Bridge</span></h2>
+      <p>
+        <span class="zh">在這個專案中，我並沒有負責 FIX Engine 或 Infrastructure 的開發。我的角色更像是一個橋樑。我負責：</span>
+        <span class="en">I wasn't responsible for building the FIX engine or the infrastructure. My role was closer to a bridge. I was responsible for:</span>
+      </p>
+      <ul class="dash">
+        <li><span class="zh">理解 CEO 想解決的商業問題</span><span class="en">Understanding the business problem the CEO wanted to solve</span></li>
+        <li><span class="zh">理解工程團隊的技術限制</span><span class="en">Understanding the engineering team's technical constraints</span></li>
+        <li><span class="zh">把複雜的 FIX 概念整理成產品規格</span><span class="en">Organizing complex FIX concepts into product specifications</span></li>
+        <li><span class="zh">設計 Back Office 設定方式</span><span class="en">Designing the back-office configuration</span></li>
+        <li><span class="zh">整理對外 Integration Documentation</span><span class="en">Structuring the external integration documentation</span></li>
+        <li><span class="zh">確保產品模型符合真正使用 FIX 的客戶</span><span class="en">Ensuring the product model matched how real FIX clients work</span></li>
+      </ul>
+    </section>
+
+    <!-- Product Decisions -->
+    <section class="sec reveal">
+      <div class="sec-label">Product Decisions</div>
+      <h2><span class="zh">五個產品決策</span><span class="en">Five Product Decisions</span></h2>
+
+      <div class="decision">
+        <div class="num">DECISION 01</div>
+        <h3><span class="zh">將 Engineering Configuration 轉換成 Product Configuration</span><span class="en">Turning Engineering Configuration into Product Configuration</span></h3>
+        <p>
+          <span class="zh">Tech Lead 一開始整理了建立 FIX Account 所需要的技術欄位。但我很快發現：工程師理解的設定，不代表客戶能理解。因此，我開始逐一檢查每一個欄位 — 哪些欄位是真正需要提供給客戶？哪些只是工程內部使用？哪些名稱應該改成商業語言？哪些設定可以重新分組，降低理解成本？</span>
+          <span class="en">Our Tech Lead first listed the technical fields required to create a FIX account. But I quickly realized: configuration that makes sense to engineers doesn't necessarily make sense to clients. So I went through every field, one by one — which fields do clients genuinely need? Which are internal-only? Which names should be rewritten in business language? Which settings could be regrouped to lower the cost of understanding?</span>
+        </p>
+        <p>
+          <span class="zh">我一方面和 Tech Lead 確認技術需求，一方面和 CEO 確認商業需求，最後重新整理 Back Office 的設定介面。我的目標不是把所有工程設定直接搬到畫面，而是讓客戶知道自己正在設定什麼。</span>
+          <span class="en">I verified technical needs with the Tech Lead and business needs with the CEO, then restructured the back-office configuration UI. The goal was never to copy every engineering setting onto a screen — it was to make sure clients know what they're configuring.</span>
+        </p>
+        <div class="lesson"><b><span class="zh">體會：</span><span class="en">Lesson:</span></b> <span class="zh">Product Manager 的工作，不只是增加功能，而是把技術翻譯成產品。</span><span class="en">A PM's job isn't just adding features — it's translating technology into product.</span></div>
+      </div>
+
+      <div class="decision">
+        <div class="num">DECISION 02</div>
+        <h3><span class="zh">用 Connectivity 建立產品模型，而不是功能分類</span><span class="en">Modeling the Product Around Connectivity, Not Features</span></h3>
+        <p>
+          <span class="zh">這是我印象最深刻的一次產品討論。專案初期，我們曾經把 Quote 和 Trade 視為兩個獨立功能，因此也曾考慮做成兩個獨立頁面。但深入研究 FIX Protocol、競品，以及和工程團隊討論後，我發現真正需要管理的並不是功能，而是一組 FIX Connectivity。</span>
+          <span class="en">This was the product discussion that stuck with me most. Early on, we treated Quote and Trade as two independent features — and considered building them as two separate pages. But after digging into the FIX protocol, competitors, and discussions with engineering, I realized what actually needs to be managed isn't features — it's a FIX Connectivity.</span>
+        </p>
+        <p>
+          <span class="zh">每一組 Connectivity 都包含兩個獨立 Channel：Quote（Market Data）與 Trade（Order Execution）。它們仍然維持獨立設定 — 不同 Port、不同 Connection、不同用途 — 但它們屬於同一組 Connection。</span>
+          <span class="en">Each Connectivity contains two independent channels: Quote (market data) and Trade (order execution). They stay independently configured — different ports, different connections, different purposes — but they belong to the same connection group.</span>
+        </p>
+        <div class="model-compare">
+          <div class="model-box">
+            <div class="cap"><span class="zh">原本：功能分類</span><span class="en">Before: by feature</span></div>
+            <span class="chip">Quote</span>
+            <span class="chip">Trade</span>
+          </div>
+          <div class="model-arrow">→</div>
+          <div class="model-box good">
+            <div class="cap"><span class="zh">改為：Connectivity 模型</span><span class="en">After: connectivity model</span></div>
+            <div class="outer">
+              <div class="t">Connectivity</div>
+              <span class="chip">Quote · Market Data</span>
+              <span class="chip">Trade · Order Execution</span>
+            </div>
+          </div>
+        </div>
+        <p>
+          <span class="zh">這樣既保留了工程上的獨立性，也更符合機構客戶管理 FIX Connection 的方式。最後，我們採用了這個產品模型。</span>
+          <span class="en">This preserved the engineering independence of each channel while matching how institutional clients actually manage FIX connections. We adopted this model.</span>
+        </p>
+        <div class="lesson"><b><span class="zh">體會：</span><span class="en">Lesson:</span></b> <span class="zh">好的產品，不只是簡化畫面，而是建立符合使用者心智模型（Mental Model）的資訊架構。</span><span class="en">Good product work isn't simplifying screens — it's building an information architecture that matches the user's mental model.</span></div>
+      </div>
+
+      <div class="decision">
+        <div class="num">DECISION 03</div>
+        <h3><span class="zh">建立 Institutional Commission（DPM）的產品設定</span><span class="en">Defining the Institutional Commission (DPM) Configuration</span></h3>
+        <p>
+          <span class="zh">在串接 Institutional Trading 時，我們開始支援 DPM（Dollar Per Million）佣金模式。演算法本身沒有太大的爭議，真正困難的是，不同團隊對於同一套商業規則的理解並不一致 — 哪些設定需要提供給客戶？Back Office 應該如何呈現？哪些名稱才符合市場慣例？</span>
+          <span class="en">To support institutional trading we introduced the DPM (Dollar Per Million) commission model. The algorithm itself wasn't controversial. The real difficulty was that different teams understood the same business rules differently — which settings should be exposed to clients? How should the back office present them? Which names match market convention?</span>
+        </p>
+        <p>
+          <span class="zh">我的工作不是重新設計 DPM，而是協助整理商業規則，讓產品、工程與商業團隊都使用一致的語言討論同一套邏輯。</span>
+          <span class="en">My job wasn't to redesign DPM — it was to organize the business rules so product, engineering, and business teams discussed the same logic in the same language.</span>
+        </p>
+      </div>
+
+      <div class="decision">
+        <div class="num">DECISION 04</div>
+        <h3><span class="zh">理解 Netting，把交易規則帶進產品設計</span><span class="en">Understanding Netting — Bringing Trading Rules into Product Design</span></h3>
+        <p>
+          <span class="zh">另一個讓我印象深刻的是 Netting。這個概念最早由工程團隊提出，過去我從來沒有接觸過。因此，我重新理解：Netting 與 Hedging 的差異、Position 如何計算、Commission 如何受到影響、為什麼交易引擎需要這種模式。</span>
+          <span class="en">Another concept that left a mark was netting. Engineering raised it first, and I had never encountered it. So I worked through it from scratch: how netting differs from hedging, how positions are calculated, how commissions are affected, and why a trading engine needs this mode.</span>
+        </p>
+        <p>
+          <span class="zh">理解之後，我開始把這些交易規則納入產品規劃。雖然交易引擎不是由我設計，但我必須理解它的運作方式，才能確保產品規格與系統行為保持一致。<strong>這也是我第一次真正開始從「系統」而不是「畫面」思考產品。</strong></span>
+          <span class="en">Once I understood it, I folded these trading rules into the product plan. I didn't design the trading engine — but I had to understand how it behaves, so the product spec and system behavior stayed consistent. <strong>This was the first time I truly started thinking about products from the system, not the screen.</strong></span>
+        </p>
+      </div>
+
+      <div class="decision">
+        <div class="num">DECISION 05</div>
+        <h3><span class="zh">建立對外 Integration Documentation</span><span class="en">Building the External Integration Documentation</span></h3>
+        <p>
+          <span class="zh">對 Institutional Client 而言，Documentation 本身就是產品的一部分。因此，我也參與整理對外 Integration 文件，包含文件架構、欄位定義、名詞一致性、對外用語與 Integration Flow。</span>
+          <span class="en">For institutional clients, documentation is part of the product. So I helped structure the external integration docs — document architecture, field definitions, terminology consistency, external language, and the integration flow.</span>
+        </p>
+        <p>
+          <span class="zh">我的工作不是撰寫 FIX Protocol，而是讓這份文件真正能幫助客戶完成串接，而不是只有工程師看得懂。</span>
+          <span class="en">The job wasn't to write the FIX protocol — it was to make the documentation genuinely help clients complete their integration, instead of being readable only by engineers.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Deliverables -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">我實際交付了什麼</span><span class="en">What I Delivered</span></div>
+      <h2><span class="zh">四個面向的產出</span><span class="en">Deliverables Across Four Areas</span></h2>
+      <div class="deliver-grid">
+        <div class="dg">
+          <div class="h">Product Discovery</div>
+          <ul>
+            <li>Institutional Trading Research</li>
+            <li>FIX Protocol Research</li>
+            <li><span class="zh">競品分析（PrimeXM、OneZero、IG）</span><span class="en">Competitor Analysis (PrimeXM, OneZero, IG)</span></li>
+          </ul>
+        </div>
+        <div class="dg">
+          <div class="h">Product Design</div>
+          <ul>
+            <li>FIX Account Configuration</li>
+            <li>Connectivity Information Architecture</li>
+            <li>Quote / Trade Configuration Model</li>
+            <li>DPM Commission Configuration</li>
+            <li>Back Office UX</li>
+          </ul>
+        </div>
+        <div class="dg">
+          <div class="h">Documentation</div>
+          <ul>
+            <li>Integration Documentation</li>
+            <li>External Specification Structure</li>
+            <li>Business Terminology Alignment</li>
+          </ul>
+        </div>
+        <div class="dg">
+          <div class="h">Cross-team Collaboration</div>
+          <ul>
+            <li><span class="zh">與 CEO 對齊商業需求</span><span class="en">Aligning business needs with the CEO</span></li>
+            <li><span class="zh">與 Tech Lead 對齊技術限制</span><span class="en">Aligning technical constraints with the Tech Lead</span></li>
+            <li><span class="zh">將工程設定轉換成產品設定</span><span class="en">Turning engineering config into product config</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Outcome -->
+    <section class="sec reveal">
+      <div class="sec-label"><span class="zh">專案成果</span><span class="en">Outcome</span></div>
+      <h2><span class="zh">把交易基礎設施，變成可以交付的產品</span><span class="en">Turning Trading Infrastructure into a Deliverable Product</span></h2>
+      <div class="outcome-card">
+        <p>
+          <span class="zh">雖然我沒有負責 FIX Engine 或 Trading Infrastructure 的開發，但我負責的是另一件我認為更重要的事情：<strong>把一套高度技術化的交易基礎設施，整理成一個可以理解、可以設定、可以交付給客戶的產品。</strong></span>
+          <span class="en">I didn't build the FIX engine or the trading infrastructure. What I owned was something I consider more important: <strong>organizing a deeply technical piece of trading infrastructure into a product that can be understood, configured, and delivered to clients.</strong></span>
+        </p>
+        <ul>
+          <li><span class="zh">FIX Account 建立流程</span><span class="en">FIX account creation flow</span></li>
+          <li>Back Office FIX Configuration</li>
+          <li><span class="zh">Connectivity 管理模型</span><span class="en">Connectivity management model</span></li>
+          <li><span class="zh">Quote / Trade Channel 設計</span><span class="en">Quote / Trade channel design</span></li>
+          <li>DPM Commission Configuration</li>
+          <li>Integration Documentation</li>
+          <li><span class="zh">OneZero Demo Hub 串接準備</span><span class="en">OneZero Demo Hub integration readiness</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Reflection -->
+    <section class="sec reveal">
+      <div class="sec-label">Reflection</div>
+      <h2><span class="zh">重要的不是學會 FIX，而是建立理解框架</span><span class="en">The Point Wasn't Learning FIX — It Was Building a Framework for Understanding</span></h2>
+      <p>
+        <span class="zh">這個專案最大的收穫，不是學會 FIX Protocol，而是重新理解 Product Manager 的角色。一開始，我最大的疑問其實很單純：FIX 是什麼？Institutional 和 Retail 有什麼不同？為什麼公司要做這個產品？如果我自己都不了解，又怎麼可能設計出讓客戶理解的產品？</span>
+        <span class="en">The biggest takeaway wasn't learning the FIX protocol — it was rethinking the PM's role. My initial questions were simple: What is FIX? How is institutional different from retail? Why is the company building this? And if I don't understand it, how could I design a product clients can understand?</span>
+      </p>
+      <p>
+        <span class="zh">後來我發現，真正重要的並不是把所有技術都學會，而是知道如何建立自己的理解框架。</span>
+        <span class="en">What I learned is that the point isn't mastering every technology — it's knowing how to build your own framework for understanding.</span>
+      </p>
+      <div class="habit">
+        <div class="t"><span class="zh">我的理解框架</span><span class="en">My framework</span></div>
+        <ol>
+          <li><span class="zh">先理解商業目標</span><span class="en">First, understand the business goal</span></li>
+          <li><span class="zh">再研究產業與競品</span><span class="en">Then research the industry and competitors</span></li>
+          <li><span class="zh">和工程團隊一起拆解技術概念</span><span class="en">Break down technical concepts with the engineering team</span></li>
+          <li><span class="zh">最後整理成可以交付的產品</span><span class="en">Finally, organize it all into a deliverable product</span></li>
+        </ol>
+      </div>
+      <p style="margin-top:22px">
+        <span class="zh">這也成為我之後所有專案的工作方式。無論是 Copy Trading、Trading Analysis，還是 Securities App，我都會先理解整個系統，再開始設計產品。</span>
+        <span class="en">This became how I work on every project since. Whether it's Copy Trading, Trading Analysis, or the Securities App — I understand the whole system first, then design the product.</span>
+      </p>
+      <div class="quote-card big">
+        <span class="zh">我相信，Product Manager 的價值，不是知道所有答案，而是能快速理解陌生且複雜的系統，並把它轉化成不同角色都能理解、實作與使用的產品。</span>
+        <span class="en">I believe a Product Manager's value isn't knowing all the answers — it's quickly understanding unfamiliar, complex systems and transforming them into products that every role can understand, build, and use.</span>
+      </div>
+    </section>
+
+  </div>
+</article>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="wrap-wide">
+    <div class="cta-card">
+      <div class="t"><span class="zh">下一個案例，或回到作品列表？</span><span class="en">Next case, or back to the list?</span></div>
+      <div>
+        <a class="btn btn-secondary" href="case-securities-app.html"><span class="zh">Case 01 · 從設計稿到正式上線</span><span class="en">Case 01 · Shippable Product</span></a>
+        <a class="btn btn-primary" href="index.html#work"><span class="zh">回到作品列表 →</span><span class="en">Back to Work →</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <span>Case Study 02 · Building ACY Connect — FIX API</span>
+    <span class="sig">Bella Chen 2026/07/07</span>
+  </div>
+</footer>
+
+<script>
+  function setLang(l){
+    document.body.setAttribute('data-lang', l);
+    document.documentElement.lang = (l === 'zh') ? 'zh-Hant' : 'en';
+    document.getElementById('btn-zh').classList.toggle('on', l === 'zh');
+    document.getElementById('btn-en').classList.toggle('on', l === 'en');
+  }
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
