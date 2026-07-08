@@ -128,19 +128,13 @@
   .case a:hover{text-decoration:underline}
   .flag{background:#FFF7EA;color:#8A6415;font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 12px;display:inline-block;margin-left:8px;vertical-align:2px}
 
-  /* ============ Skills ============ */
-  .skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-card)}
-  .skill-cell{padding:26px 28px;border-bottom:1px solid var(--border)}
-  @media(min-width:680px){
-    .skill-cell:nth-child(odd){border-right:1px solid var(--border)}
-    .skill-cell:nth-last-child(-n+2){border-bottom:none}
-  }
-  .skill-cell .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
-  .skill-cell .name{font-weight:700;font-size:15px}
-  .skill-cell .pct{font-family:'Inter',monospace;font-size:12.5px;color:var(--text-secondary)}
-  .progress{height:8px;background:var(--border);border-radius:999px;overflow:hidden}
-  .progress .fill{height:100%;background:var(--blue);border-radius:999px;transition:width 1s ease}
-  .skill-cell .note{font-size:12.5px;color:var(--caption);margin-top:9px}
+  /* ============ Core Capabilities ============ */
+  .cap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .cap{background:var(--white);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-card);padding:24px 26px;transition:transform .2s,box-shadow .2s}
+  .cap:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+  .cap .dot{width:10px;height:10px;border-radius:50%;background:var(--grad-soft-blue);margin-bottom:14px}
+  .cap .name{font-weight:700;font-size:15.5px}
+  .cap p{font-size:13.5px;color:var(--text-secondary);margin-top:7px}
 
   /* ============ Thoughts ============ */
   #thoughts{background:var(--grad-warm-neutral)}
@@ -199,8 +193,8 @@
       <span class="en">Turning Complexity<br>into <span class="accent">Clarity</span>.</span>
     </h1>
     <p>
-      <span class="zh">金融交易平台產品經理。從清算後台到 FIX API 整合，我把散落的系統知識變成可執行的規格、可複用的流程。</span>
-      <span class="en">Product Manager for trading platforms. From clearing back-office to FIX API integration, I turn scattered system knowledge into executable specs and repeatable processes.</span>
+      <span class="zh">十年產品經驗橫跨金融數據、社群平台、移動出行與交易平台。我喜歡理解複雜的商業規則與系統流程，並把它們整理成團隊可以共同理解、一起實作的產品。</span>
+      <span class="en">Ten years of product experience across fintech data, community platforms, mobility, and trading platforms. I enjoy understanding complex business rules and system flows, and shaping them into products a team can understand and build together.</span>
     </p>
     <div class="actions">
       <a class="btn btn-primary" href="#work"><span class="zh">看我的作品 →</span><span class="en">View My Work →</span></a>
@@ -224,16 +218,16 @@
     <div class="about-grid">
       <div>
         <p>
-          <span class="zh">我是一位偏向 Systems PM 的產品經理：擅長把整個系統攤開來看，找到流程的斷點，建立規則，再把規則寫成工程師可以直接執行的規格。</span>
-          <span class="en">I'm a systems-oriented Product Manager: I map whole systems, find where processes break, build the rules, and translate them into specs engineers can execute directly.</span>
+          <span class="zh">我通常不是從畫面開始思考產品，而是先理解整個系統。在開始規劃功能之前，我習慣先釐清商業規則、資料流、使用者流程，以及不同系統之間的關聯，再把這些資訊整理成工程團隊可以落地實作的產品規格。</span>
+          <span class="en">I usually don't start thinking about a product from the screen — I start from the system. Before planning any feature, I first clarify the business rules, data flows, user journeys, and how different systems relate, then turn that understanding into product specs an engineering team can actually build.</span>
         </p>
         <p>
-          <span class="zh">十年 PM 路徑橫跨金融數據、社群生態系與移動出行，最後在交易平台落地。清算團隊出身的背景，讓我對交易平台的底層 — FIX 協議、後台權限、佣金與返佣邏輯、公司行動 — 有第一手的領域深度。這是多數 feature PM 沒有的視角。</span>
-          <span class="en">A ten-year PM path across fintech data, community ecosystems, and mobility eventually landed in trading platforms. A clearing-team background gives me first-hand depth in their underside — FIX protocol, back-office permissions, commission and rebate logic, corporate actions. It's a perspective most feature PMs never get.</span>
+          <span class="zh">過去十年，我參與過金融數據、社群平台、移動出行以及交易平台等不同領域的產品。每一次跨領域，都需要重新理解新的商業模式、新的使用者，以及新的系統規則。這些經驗也讓我更習慣快速建立領域知識，並把複雜的問題整理成清楚的產品方案。</span>
+          <span class="en">Over the past ten years I've worked on products across fintech data, community platforms, mobility, and trading platforms. Every domain switch meant learning a new business model, new users, and new system rules — experiences that taught me to build domain knowledge quickly and distill complex problems into clear product solutions.</span>
         </p>
         <p>
-          <span class="zh">我相信好的產品工作是把混亂變成秩序、把知識變成流程、把流程變成組織可以重複使用的能力。</span>
-          <span class="en">I believe good product work turns chaos into order, knowledge into process, and process into capability an organization can reuse.</span>
+          <span class="zh">我相信好的產品工作，不只是交付功能。更重要的是，把混亂整理成秩序，把知識沉澱成流程，讓團隊能夠持續累積、重複使用，並一起做出更好的產品。</span>
+          <span class="en">I believe good product work is about more than shipping features. What matters more is turning chaos into order and distilling knowledge into process, so a team can keep accumulating, keep reusing — and build better products together.</span>
         </p>
       </div>
       <div class="fact-card">
@@ -264,10 +258,10 @@
         <div class="tl-role">Product Manager</div>
         <div class="tl-org">ACY Securities · <span class="zh">交易平台</span><span class="en">Trading Platform</span></div>
         <div class="tl-desc">
-          <span class="zh">負責交易平台產品：FIX API 機構接入、證券 APP 從重建到全量發布、後台權限與佣金／返佣系統。清算團隊出身，是團隊裡少數同時懂前台產品與後台清算的 PM。</span>
-          <span class="en">Own trading-platform products: FIX API institutional connectivity, a securities app taken from rebuild to full rollout, and back-office permission and commission/rebate systems. Clearing-team background — one of the few PMs fluent in both front-office product and back-office operations.</span>
+          <span class="zh">在 ACY，我開始深入交易平台的核心系統，從清算流程、FIX API、權限模型，到證券 App 與 Copy Trading。這段經驗讓我不只規劃功能，也開始理解交易平台背後的商業規則，以及不同系統之間如何協作。</span>
+          <span class="en">At ACY I went deep into the core systems of a trading platform — clearing, FIX API, permission models, a securities app, and copy trading. This is where I moved beyond planning features to understanding the business rules behind a trading platform, and how its systems work together.</span>
         </div>
-        <div class="tl-kws"><span>FIX API</span><span>Clearing</span><span>Back Office</span><span>Mobile</span></div>
+        <div class="tl-kws"><span>FIX API</span><span>Clearing</span><span>Permission Model</span><span>Copy Trading</span></div>
       </div>
 
       <div class="tl-item pause reveal">
@@ -286,8 +280,8 @@
         <div class="tl-role">Project Manager</div>
         <div class="tl-org">Taiwan Taxi 55688 · <span class="zh">移動出行平台</span><span class="en">Mobility Platform</span></div>
         <div class="tl-desc">
-          <span class="zh">將家事清潔服務從 webview 改造成原生流程、規劃 in-app 事件追蹤基礎建設，並開發 MGM 跨產品導流後台，串起集團生態系。</span>
-          <span class="en">Rebuilt the home-cleaning flow from webview to native, designed in-app event-tracking infrastructure, and built an MGM cross-promotion backend connecting products across the group.</span>
+          <span class="zh">在 55688，我開始接觸跨產品整合。從會員導流、事件追蹤到服務流程重新設計，我學會的不只是單一產品，而是如何讓多個產品共同創造價值。</span>
+          <span class="en">At 55688 I first worked on cross-product integration. From member referral flows and event tracking to service-flow redesign, what I learned wasn't a single product — it was how multiple products create value together.</span>
         </div>
         <div class="tl-kws"><span>Event Tracking</span><span>MGM Backend</span><span>UX Redesign</span></div>
       </div>
@@ -297,8 +291,8 @@
         <div class="tl-role">Product Manager</div>
         <div class="tl-org">Gamania · beanfun! <span class="zh">社群生態系</span><span class="en">Community Ecosystem</span></div>
         <div class="tl-desc">
-          <span class="zh">從 0 到 1 打造核心功能「Groups」，整體停留時間提升 3 倍；重新設計註冊登入流程，客訴減少 30%；並建立內容審核後台，大幅降低詐騙與廣告曝露。</span>
-          <span class="en">Built "Groups" from 0→1 as a core ecosystem feature, tripling overall retention time; redesigned onboarding, cutting complaints by 30%; and implemented a content-moderation backend that sharply reduced scam and ad exposure.</span>
+          <span class="zh">在 beanfun!，我第一次完整參與大型消費產品的規劃與迭代。從社群功能、註冊登入到內容審核，我開始思考如何在使用者需求、商業目標與開發成本之間取得平衡，也累積了從 0 到 1 建立產品的經驗。</span>
+          <span class="en">At beanfun! I took part in the full planning and iteration of a large consumer product for the first time. From community features and onboarding to content moderation, I began weighing user needs, business goals, and development cost against each other — and gained real experience building a product from 0 to 1.</span>
         </div>
         <div class="tl-kws"><span>0→1</span><span>3× Retention</span><span>Moderation System</span></div>
       </div>
@@ -308,8 +302,8 @@
         <div class="tl-role">Product Manager</div>
         <div class="tl-org"><span class="zh">麻布數據科技 · 發票／金融數據平台</span><span class="en">Mabu Data · Invoice &amp; Fintech Data Platform</span></div>
         <div class="tl-desc">
-          <span class="zh">定義信用卡回饋計算邏輯並整合全市場卡片數據，活躍用戶提升 10%；打造即時信用卡比較平台鎖定高消費族群；規劃以發票數據驅動的中小企業雲端 CRM。</span>
-          <span class="en">Defined reward-calculation logic integrating market-wide credit-card data (+10% active users), built a real-time card-comparison platform targeting high spenders, and planned an invoice-data-driven cloud CRM for SMEs.</span>
+          <span class="zh">我的 PM 生涯從金融數據開始。信用卡回饋、發票資料、CRM，看似都是數據產品，但真正吸引我的是背後的商業邏輯與計算規則。也是從這裡開始，我養成了先理解規則，再設計產品的工作習慣。</span>
+          <span class="en">My PM career began in fintech data. Credit-card rewards, invoice data, CRM — they look like data products, but what drew me in was the business logic and calculation rules underneath. This is where I formed the habit of understanding the rules first, then designing the product.</span>
         </div>
         <div class="tl-kws"><span>Fintech Data</span><span>Calculation Logic</span><span>SME CRM</span></div>
       </div>
@@ -324,32 +318,32 @@
     <div class="eyebrow">Selected Work</div>
     <h2 class="sec-h"><span class="zh">精選作品</span><span class="en">Case Studies</span></h2>
     <p class="sec-sub">
-      <span class="zh">三個案例，三種能力切面：領域深度、端到端交付、系統思維。</span>
-      <span class="en">Three cases, three facets: domain depth, end-to-end delivery, systems thinking.</span>
+      <span class="zh">這些案例涵蓋不同產品階段與不同產業，但都有一個共同點：它們都來自真實而複雜的產品問題。我希望透過這些案例，分享自己如何理解問題、做出產品決策，以及和不同團隊一起把想法落地。</span>
+      <span class="en">These cases span different product stages and industries, but they share one thing: they all come from real, complex product problems. Through them, I want to share how I understand a problem, make product decisions, and land ideas together with different teams.</span>
     </p>
     <div class="work-grid">
       <article class="case reveal">
         <div class="icon">🔗</div>
-        <div class="role-tag">Flagship · Domain Depth</div>
-        <h3>FIX API / ACY Connect<span class="flag"><span class="zh">旗艦案例</span><span class="en">Flagship</span></span></h3>
+        <div class="role-tag">Case Study 02</div>
+        <h3>Building ACY Connect — FIX API<span class="flag"><span class="zh">旗艦案例</span><span class="en">Flagship</span></span></h3>
         <p>
-          <span class="zh">從協議文件到佣金邏輯：機構級 API 接入的產品規格與文件強化，涵蓋 ExecutionReport、訂單生命週期與計費規則。</span>
-          <span class="en">From protocol docs to commission logic: product specs and documentation for institutional API connectivity — ExecutionReport, order lifecycle, and fee rules.</span>
+          <span class="zh">從零理解機構交易基礎設施，打造公司的第一個 Institutional Product — 把 FIX Protocol 的技術規則，翻譯成客戶能理解、工程能實作的產品。</span>
+          <span class="en">Understanding institutional trading infrastructure from zero to build the company's first institutional product — translating FIX protocol rules into a product clients understand and engineers can build.</span>
         </p>
-        <div class="kws"><span>FIX Protocol</span><span>Institutional</span><span>API Design</span></div>
-        <a href="#"><span class="zh">閱讀案例 →</span><span class="en">Read case →</span></a>
+        <div class="kws"><span>FIX Protocol</span><span>Institutional</span><span>Trading Infrastructure</span></div>
+        <a href="case-fix-api.html"><span class="zh">閱讀案例 →</span><span class="en">Read case →</span></a>
       </article>
 
       <article class="case reveal">
         <div class="icon">📱</div>
-        <div class="role-tag">End-to-End Delivery</div>
-        <h3><span class="zh">證券 APP 重建</span><span class="en">Securities App Rebuild</span></h3>
+        <div class="role-tag">Case Study 01</div>
+        <h3><span class="zh">從設計稿到正式上線</span><span class="en">Turning a Design into a Shippable Product</span></h3>
         <p>
-          <span class="zh">從資訊架構、規格、QA 回歸測試到雙平台上架與全量發布 — 一條完整的交付鏈，由一位 PM 貫穿。</span>
-          <span class="en">From information architecture and specs through QA regression to dual-store submission and full rollout — one delivery chain, carried end to end by one PM.</span>
+          <span class="zh">接手一個「可以 Demo 卻難以交付」的交易 App：把 Happy Path 補齊成完整產品規格，對齊 UI 與 Backend，一路推動到雙市場正式上線。</span>
+          <span class="en">Taking over a trading app that could demo but couldn't ship: expanding Happy Paths into a full specification, aligning UI with backend, and driving it to launch across markets.</span>
         </p>
-        <div class="kws"><span>Mobile</span><span>QA</span><span>App Store Release</span></div>
-        <a href="#"><span class="zh">閱讀案例 →</span><span class="en">Read case →</span></a>
+        <div class="kws"><span>Product Spec</span><span>Release Strategy</span><span>App Store</span></div>
+        <a href="case-securities-app.html"><span class="zh">閱讀案例 →</span><span class="en">Read case →</span></a>
       </article>
 
       <article class="case reveal">
@@ -387,45 +381,40 @@
   </div>
 </section>
 
-<!-- ============ Skills ============ -->
+<!-- ============ Core Capabilities ============ -->
 <section id="skills">
   <div class="wrap">
-    <div class="eyebrow">Competency</div>
-    <h2 class="sec-h"><span class="zh">能力矩陣</span><span class="en">Competency Matrix</span></h2>
+    <div class="eyebrow">Core Capabilities</div>
+    <h2 class="sec-h"><span class="zh">核心能力</span><span class="en">Core Capabilities</span></h2>
     <p class="sec-sub">
-      <span class="zh">基於實際 Jira 交付紀錄整理的能力評估 — 每一條都有票號可以對應。</span>
-      <span class="en">A competency assessment grounded in actual Jira delivery records — every bar maps to real tickets.</span>
+      <span class="zh">這些是我在十年產品工作中持續累積的能力。</span>
+      <span class="en">Capabilities built and sharpened over ten years of product work.</span>
     </p>
-    <div class="skill-grid">
-      <div class="skill-cell reveal">
-        <div class="row"><span class="name">Trading Domain</span><span class="pct">5.0 / 5</span></div>
-        <div class="progress"><div class="fill" style="width:100%"></div></div>
-        <div class="note"><span class="zh">訂單簿計價、佣金、FIX、公司行動</span><span class="en">Order-book pricing, commission, FIX, corporate actions</span></div>
+    <div class="cap-grid">
+      <div class="cap reveal">
+        <div class="dot"></div>
+        <div class="name"><span class="zh">深入理解交易平台規則</span><span class="en">Trading Platform Domain</span></div>
+        <p><span class="zh">從清算、佣金計算到 FIX 協議，理解交易平台背後的商業規則與系統協作。</span><span class="en">From clearing and commission logic to the FIX protocol — the business rules and system interplay behind a trading platform.</span></p>
       </div>
-      <div class="skill-cell reveal">
-        <div class="row"><span class="name">Product Delivery</span><span class="pct">4.5 / 5</span></div>
-        <div class="progress"><div class="fill" style="width:90%"></div></div>
-        <div class="note"><span class="zh">規格 → QA → 上架 → 全量發布</span><span class="en">Spec → QA → store release → full rollout</span></div>
+      <div class="cap reveal">
+        <div class="dot"></div>
+        <div class="name"><span class="zh">複雜產品拆解</span><span class="en">Complex Product Breakdown</span></div>
+        <p><span class="zh">把大而模糊的問題拆解成清楚的規則、流程與可執行的階段。</span><span class="en">Breaking large, ambiguous problems into clear rules, flows, and executable phases.</span></p>
       </div>
-      <div class="skill-cell reveal">
-        <div class="row"><span class="name">Systems Thinking</span><span class="pct">4.5 / 5</span></div>
-        <div class="progress"><div class="fill" style="width:90%"></div></div>
-        <div class="note"><span class="zh">邊界條件、狀態機、跨系統依賴</span><span class="en">Edge cases, state machines, cross-system dependencies</span></div>
+      <div class="cap reveal">
+        <div class="dot"></div>
+        <div class="name">Product Delivery</div>
+        <p><span class="zh">從規格、開發、QA 到上架發布，完整走過產品交付的每一段。</span><span class="en">Full delivery experience — from specs and development through QA to store release and rollout.</span></p>
       </div>
-      <div class="skill-cell reveal">
-        <div class="row"><span class="name">Technical Knowledge</span><span class="pct">4.0 / 5</span></div>
-        <div class="progress"><div class="fill" style="width:80%"></div></div>
-        <div class="note"><span class="zh">API 規格、auth 流程、root cause 定位</span><span class="en">API specs, auth flows, root-cause analysis</span></div>
+      <div class="cap reveal">
+        <div class="dot"></div>
+        <div class="name">Technical Communication</div>
+        <p><span class="zh">用工程團隊的語言溝通 API、資料流與邊界條件，讓規格可以直接落地。</span><span class="en">Speaking the engineering team's language — APIs, data flows, edge cases — so specs land the first time.</span></p>
       </div>
-      <div class="skill-cell reveal">
-        <div class="row"><span class="name">Cross-functional</span><span class="pct">4.0 / 5</span></div>
-        <div class="progress"><div class="fill" style="width:80%"></div></div>
-        <div class="note"><span class="zh">FE / BE / QA / Design 十人以上協作</span><span class="en">Coordinating 10+ across FE / BE / QA / Design</span></div>
-      </div>
-      <div class="skill-cell reveal">
-        <div class="row"><span class="name">AI Workflow</span><span class="pct"><span class="zh">建構中</span><span class="en">Building</span></span></div>
-        <div class="progress"><div class="fill" style="width:45%;background:var(--warning)"></div></div>
-        <div class="note"><span class="zh">Spec 生成、知識庫、自動化流程</span><span class="en">Spec generation, knowledge bases, automation</span></div>
+      <div class="cap reveal">
+        <div class="dot"></div>
+        <div class="name">Cross-functional Collaboration</div>
+        <p><span class="zh">與前端、後端、QA 與設計協作，在不同觀點之間建立共識、推動決策。</span><span class="en">Working across FE, BE, QA, and design to build consensus and move decisions forward.</span></p>
       </div>
     </div>
   </div>
@@ -470,8 +459,8 @@
     <div class="card reveal">
       <h2><span class="zh">正在尋找日本・新加坡的 PM 機會</span><span class="en">Open to PM Roles in Japan &amp; Singapore</span></h2>
       <p>
-        <span class="zh">如果你的團隊需要一位懂交易平台底層、能把複雜系統寫成清楚規格的產品經理，我們聊聊。</span>
-        <span class="en">If your team needs a PM who understands the underside of trading platforms and turns complex systems into clear specs — let's talk.</span>
+        <span class="zh">如果你的團隊正在尋找一位喜歡理解複雜產品、善於跨團隊合作，並能把想法整理成清楚產品方向的 Product Manager，我很期待和你聊聊。</span>
+        <span class="en">If your team is looking for a Product Manager who loves understanding complex products, collaborates well across teams, and turns ideas into clear product direction — I'd love to talk.</span>
       </p>
       <a class="btn btn-primary" href="mailto:hello@example.com">Email Me</a>
       &nbsp;
